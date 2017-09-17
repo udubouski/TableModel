@@ -8,3 +8,6 @@ QT += core gui \
 
 HEADERS += \
     mainwindow.h
+
+RESOURCES += \
+    resource.qrc

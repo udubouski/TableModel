@@ -9,6 +9,9 @@ class QActionGroup;
 class QLabel;
 class QMenu;
 
+class QPlainTextEdit;
+class QSessionManager;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -16,23 +19,37 @@ class MainWindow : public QMainWindow
 public:
     MainWindow();
 
-/*protected:
-    void contextMenuEvent(QContextMenuEvent *event) override;
-    */
+    void loadFile(const QString &fileName);
+
+protected:
+    void closeEvent(QCloseEvent *event) override;
 
 private slots:
     void newFile();
     void open();
-    void save();
-    void saveAs();
+    bool save();
+    bool saveAs();
     void addRecord();
     void findRecord();
     void delRecord();
     void about();
 
+    void documentWasModified();
+    void commitData(QSessionManager &);
+
 private:
     void createActions();
-    void createMenus();
+
+    void createStatusBar();
+    void readSettings();
+    void writeSettings();
+    bool maybeSave();
+    bool saveFile(const QString &fileName);
+    void setCurrentFile(const QString &fileName);
+    QString strippedName(const QString &fullFileName);
+
+    QPlainTextEdit *textEdit;
+    QString curFile;
 
     QMenu *fileMenu;
     QMenu *recordMenu;
