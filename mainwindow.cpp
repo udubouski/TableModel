@@ -10,17 +10,14 @@ MainWindow::MainWindow()
 
     createActions();
     createStatusBar();
-
     readSettings();
 
     connect(textEdit->document(), &QTextDocument::contentsChanged,
             this, &MainWindow::documentWasModified);
 
-
     QGuiApplication::setFallbackSessionManagementEnabled(false);
     connect(qApp, &QGuiApplication::commitDataRequest,
             this, &MainWindow::commitData);
-
 
     setCurrentFile(QString());
     setUnifiedTitleAndToolBarOnMac(true);
@@ -76,7 +73,7 @@ bool MainWindow::saveAs()
     return saveFile(dialog.selectedFiles().first());
 }
 
-//work wiht table ![1]
+//work with table ![1]
 void MainWindow::addRecord()
 {
 
@@ -95,9 +92,8 @@ void MainWindow::delRecord()
 
 void MainWindow::about()
 {
-    QMessageBox::about(this, tr("About Menu"),
-            tr("The <b>Menu</b> example shows how to create "
-               "menu-bar menus and context menus."));
+    QMessageBox::about(this, tr("About Dialog"),
+            tr("The second lab PPVIS"));
 }
 
 void MainWindow::documentWasModified()
@@ -109,7 +105,7 @@ void MainWindow::documentWasModified()
 void MainWindow::createActions()
 {
     //File Menu
-    QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
+    QMenu *fileMenu = menuBar()->addMenu(tr("File"));
     QToolBar *fileToolBar = addToolBar(tr("File"));
 
     const QIcon newIcon = QIcon::fromTheme("document-new", QIcon(":/pic/newFile.png"));
@@ -120,10 +116,8 @@ void MainWindow::createActions()
     fileMenu->addAction(newAct);
     fileToolBar->addAction(newAct);
 
-
-
     const QIcon openIcon = QIcon::fromTheme("document-open", QIcon(":/pic/openFile.png"));
-    openAct = new QAction(openIcon, tr("&Open..."), this);
+    openAct = new QAction(openIcon, tr("&Open"), this);
     openAct->setShortcuts(QKeySequence::Open);
     openAct->setStatusTip(tr("Open an existing file"));
     connect(openAct, &QAction::triggered, this, &MainWindow::open);
@@ -139,10 +133,12 @@ void MainWindow::createActions()
     fileToolBar->addAction(saveAct);
 
     const QIcon saveAsIcon = QIcon::fromTheme("document-save-as", QIcon(":/pic/saveFileAs.png"));
-    saveAsAct = fileMenu->addAction(saveAsIcon, tr("Save &As..."), this, &MainWindow::saveAs);
+    saveAsAct = new QAction(saveAsIcon, tr("Save &As"), this);
     saveAsAct->setShortcuts(QKeySequence::SaveAs);
     saveAsAct->setStatusTip(tr("Save the document under a new name"));
-
+    connect(saveAsAct, &QAction::triggered, this, &MainWindow::saveAs);
+    fileMenu->addAction(saveAsAct);
+    fileToolBar->addAction(saveAsAct);
 
     fileMenu->addSeparator();
 
@@ -152,25 +148,25 @@ void MainWindow::createActions()
     exitAct->setStatusTip(tr("Exit the application"));
 
     //Record Menu
-    QMenu *editMenu = menuBar()->addMenu(tr("&Record"));
+    QMenu *editMenu = menuBar()->addMenu(tr("Record"));
     QToolBar *editToolBar = addToolBar(tr("Record"));
 
     const QIcon addIcon = QIcon::fromTheme("record-add", QIcon(":/pic/add.png"));
-    addAct = new QAction(addIcon, tr("&Add"), this);
+    addAct = new QAction(addIcon, tr("Add"), this);
     addAct->setStatusTip(tr("Add new record"));
     connect(addAct, &QAction::triggered, this, &MainWindow::addRecord);
     editMenu->addAction(addAct);
     editToolBar->addAction(addAct);
 
     const QIcon findIcon = QIcon::fromTheme("record-find", QIcon(":/pic/find.png"));
-    findAct = new QAction(findIcon, tr("&Find"), this);
+    findAct = new QAction(findIcon, tr("Find"), this);
     findAct->setStatusTip(tr("Find record"));
     connect(findAct, &QAction::triggered, this, &MainWindow::findRecord);
     editMenu->addAction(findAct);
     editToolBar->addAction(findAct);
 
     const QIcon deleteIcon = QIcon::fromTheme("record-delete", QIcon(":/pic/delete.png"));
-    delAct = new QAction(deleteIcon, tr("&Delete"), this);
+    delAct = new QAction(deleteIcon, tr("Delete"), this);
     delAct->setStatusTip(tr("Delete existing record"));
     connect(delAct, &QAction::triggered, this, &MainWindow::delRecord);
     editMenu->addAction(delAct);
@@ -179,9 +175,9 @@ void MainWindow::createActions()
     menuBar()->addSeparator();
 
     //Help Menu
-    QMenu *helpMenu = menuBar()->addMenu(tr("&Help"));
+    QMenu *helpMenu = menuBar()->addMenu(tr("Help"));
     const QIcon aboutIcon = QIcon::fromTheme("help-about", QIcon(":/pic/about.png"));
-    aboutAct = new QAction(aboutIcon, tr("&Help"), this);
+    aboutAct = new QAction(aboutIcon, tr("About"), this);
     aboutAct->setStatusTip(tr("Show the application's About box"));
     connect(aboutAct, &QAction::triggered, this, &MainWindow::about);
     helpMenu->addAction(aboutAct);
@@ -244,13 +240,11 @@ void MainWindow::loadFile(const QString &fileName)
     }
 
     QTextStream in(&file);
-#ifndef QT_NO_CURSOR
+
     QApplication::setOverrideCursor(Qt::WaitCursor);
-#endif
+
     textEdit->setPlainText(in.readAll());
-#ifndef QT_NO_CURSOR
     QApplication::restoreOverrideCursor();
-#endif
 
     setCurrentFile(fileName);
     statusBar()->showMessage(tr("File loaded"), 2000);
@@ -268,13 +262,12 @@ bool MainWindow::saveFile(const QString &fileName)
     }
 
     QTextStream out(&file);
-#ifndef QT_NO_CURSOR
+
     QApplication::setOverrideCursor(Qt::WaitCursor);
-#endif
+
     out << textEdit->toPlainText();
-#ifndef QT_NO_CURSOR
+
     QApplication::restoreOverrideCursor();
-#endif
 
     setCurrentFile(fileName);
     statusBar()->showMessage(tr("File saved"), 2000);

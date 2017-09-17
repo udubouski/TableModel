@@ -18,7 +18,6 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow();
-
     void loadFile(const QString &fileName);
 
 protected:
@@ -29,9 +28,11 @@ private slots:
     void open();
     bool save();
     bool saveAs();
+
     void addRecord();
     void findRecord();
     void delRecord();
+
     void about();
 
     void documentWasModified();
@@ -39,32 +40,32 @@ private slots:
 
 private:
     void createActions();
-
     void createStatusBar();
     void readSettings();
     void writeSettings();
     bool maybeSave();
+
     bool saveFile(const QString &fileName);
     void setCurrentFile(const QString &fileName);
     QString strippedName(const QString &fullFileName);
 
-    QPlainTextEdit *textEdit;
-    QString curFile;
-
     QMenu *fileMenu;
-    QMenu *recordMenu;
-    QMenu *helpMenu;
     QAction *newAct;
     QAction *openAct;
     QAction *saveAct;
     QAction *saveAsAct;
     QAction *exitAct;
+
+    QMenu *recordMenu;
     QAction *addAct;
     QAction *findAct;
     QAction *delAct;
-    QAction *aboutAct;
-    QLabel *infoLabel;
 
+    QMenu *helpMenu;
+    QAction *aboutAct;
+
+    QPlainTextEdit *textEdit;
+    QString curFile;
 };
 #endif // MAINWINDOW_H
 
