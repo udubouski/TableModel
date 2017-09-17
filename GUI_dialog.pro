@@ -1,12 +1,10 @@
 SOURCES += \
     main.cpp \
-    mainwindow.cpp \
-    finddialog.cpp
+    mainwindow.cpp
 
 QT += core gui \
     xml \
     widgets
 
 HEADERS += \
-    mainwindow.h \
-    finddialog.h
+    mainwindow.h

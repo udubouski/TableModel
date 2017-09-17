@@ -5,22 +5,49 @@
 
 #include <QMainWindow>
 class QAction;
+class QActionGroup;
 class QLabel;
+class QMenu;
 
-class MainWindow:public QMainWindow
+class MainWindow : public QMainWindow
 {
+    Q_OBJECT
+
 public:
-    MainWindow:(QWidget *parent=0);
-protected:
-    void closeEvent(QCloseEvent *event);
-    void contextMenuEvent(QContextMenuEvent *event);
+    MainWindow();
+
+/*protected:
+    void contextMenuEvent(QContextMenuEvent *event) override;
+    */
+
 private slots:
     void newFile();
     void open();
-    bool save();
-    bool saveAs();
-    void find();
-    void goToCell();
+    void save();
+    void saveAs();
+    void addRecord();
+    void findRecord();
+    void delRecord();
+    void about();
+
+private:
+    void createActions();
+    void createMenus();
+
+    QMenu *fileMenu;
+    QMenu *recordMenu;
+    QMenu *helpMenu;
+    QAction *newAct;
+    QAction *openAct;
+    QAction *saveAct;
+    QAction *saveAsAct;
+    QAction *exitAct;
+    QAction *addAct;
+    QAction *findAct;
+    QAction *delAct;
+    QAction *aboutAct;
+    QLabel *infoLabel;
+
 };
 #endif // MAINWINDOW_H
 
