@@ -1,7 +1,7 @@
 //select dialog
 
 #include <QtWidgets>
-#include <selectdialog.h>
+#include "selectdialog.h"
 
 SelectDialog::SelectDialog(QWidget *parent) : QDialog(parent)
 {
@@ -16,7 +16,7 @@ SelectDialog::SelectDialog(QWidget *parent) : QDialog(parent)
     butOk = new QPushButton(tr("OK"));
     butCancel = new QPushButton(tr("Cancel"));
 
-    connect(butOk,SIGNAL(clicked()),this,SLOT(close()));
+    connect(butOk,SIGNAL(clicked()),this,SLOT(onButtonSend()));
     connect(butCancel,SIGNAL(clicked()),this,SLOT(close()));
 
     QVBoxLayout *vbox = new QVBoxLayout;
@@ -38,4 +38,63 @@ SelectDialog::SelectDialog(QWidget *parent) : QDialog(parent)
 
     setWindowTitle("Select dialog");
     setFixedHeight(sizeHint().height());
+}
+
+bool SelectDialog::var10() const
+{
+    return rad10ch->isChecked();
+}
+
+bool SelectDialog::var11() const
+{
+    return rad11ch->isChecked();
+}
+
+bool SelectDialog::var12() const
+{
+    return rad12ch->isChecked();
+}
+
+bool SelectDialog::var13() const
+{
+    return rad13ch->isChecked();
+}
+
+bool SelectDialog::var14() const
+{
+    return rad14ch->isChecked();
+}
+
+
+void SelectDialog::onButtonSend()
+{
+    if (var10())
+    {
+        emit sendData("var10");
+        this->close();
+    }
+
+    else if (var11())
+    {
+        emit sendData("var11");
+        this->close();
+    }
+
+    else if (var12())
+    {
+        emit sendData("var12");
+        this->close();
+    }
+
+    else if (var13())
+    {
+        emit sendData("var13");
+        this->close();
+    }
+
+    else
+    {
+        emit sendData("var14");
+        this->close();
+    }
 }

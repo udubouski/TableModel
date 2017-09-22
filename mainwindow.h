@@ -7,17 +7,22 @@
 
 class QAction;
 class SelectDialog;
-class QPlainTextEdit;
+class AddDialog;
+class QTableView;
+class TableModel;
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow();
+    explicit MainWindow(QWidget *parent=0);
 
 protected:
     void closeEvent(QCloseEvent *event);
+
+public slots:
+    void recieveData(QString str);
 
 private slots:
     void newFile();
@@ -35,6 +40,7 @@ private slots:
     void updateStatusBar();
 
 private:
+    void createWidget();
     void createActions();
     void createMenus();
     void createToolBars();
@@ -50,9 +56,13 @@ private:
     void updateRecentFileActions();
     QString strippedName(const QString &fullFileName);
 
-    SelectDialog *selDialog;
     QString curFile;
-    QPlainTextEdit *textEdit;
+
+    SelectDialog *selDialog;
+    AddDialog *addDialog;
+
+    QTableView *tableView;
+    TableModel *model;
 
     QMenu *fileMenu;
     QMenu *recordMenu;

@@ -3,79 +3,116 @@
 #include <QtWidgets>
 
 #include "mainwindow.h"
+#include "tablemodel.h"
+#include "selectdialog.h"
+#include "adddialog.h"
 
-MainWindow::MainWindow()
+MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
 {
-    textEdit = new QPlainTextEdit;
-    setCentralWidget(textEdit);
+    model = new TableModel(this);
 
+    selDialog = new SelectDialog(this);
+    connect(selDialog, SIGNAL(sendData(QString)), this, SLOT(recieveData(QString)));
+
+    addDialog = new AddDialog(this);
     createActions();
     createMenus();
     createToolBars();
     createStatusBar();
-
     readSettings();
 
     setWindowIcon(QIcon(":/pic/icon.png"));
-    setCurrentFile("unnamed");
+    setCurrentFile("");
 
     setWindowTitle(tr("GUI records"));
     setMinimumSize(320, 240);
     resize(640, 480);
 }
 
+void MainWindow::recieveData(QString str)
+{
+    if (str=="var10")  createWidget();
+        //QMessageBox::about(this, tr("About Dialog"),tr("Var 10"));
+
+    else if (str=="var11")  QMessageBox::about(this, tr("About Dialog"),tr("Var 11"));
+
+
+    else if (str=="var12")  QMessageBox::about(this, tr("About Dialog"),      tr("Var 12"));
+
+
+    else if (str=="var13")  QMessageBox::about(this, tr("About Dialog"),     tr("Var 13"));
+
+
+    else QMessageBox::about(this, tr("About Dialog"),            tr("Var 14"));
+
+}
+
+void MainWindow::createWidget()
+{
+    tableView = new QTableView;
+    tableView->setModel(model);
+  //  tableView->setItemDelegate(new ItemDelegate(this));
+    tableView->verticalHeader()->setDefaultAlignment(
+            Qt::AlignVCenter|Qt::AlignRight);
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->addWidget(tableView);
+    QWidget *widget = new QWidget;
+    widget->setLayout(layout);
+    setCentralWidget(widget);
+}
+
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (okToContinue()) {
+   /* if (okToContinue()) {
         writeSettings();
         event->accept();
     } else {
         event->ignore();
-    }
+    }*/
+    event->accept();
 }
-
 
 void MainWindow::newFile()
 {
-    if (okToContinue()) {
-            textEdit->clear();
+    /*if (okToContinue()) {
+            //textEdit->clear();
             setCurrentFile("");
-        }
-    //selDialog = new SelectDialog(this);
-    //selDialog->show();
+        }*/
+    selDialog->show();
+
 }
 
 void MainWindow::open()
 {
-    if (okToContinue()) {
+   /* if (okToContinue()) {
             QString fileName = QFileDialog::getOpenFileName(this);
             if (!fileName.isEmpty())
                 loadFile(fileName);
-        }
+        }*/
 }
 
 bool MainWindow::save()
 {
-    if (curFile.isEmpty()) {
+  /*  if (curFile.isEmpty()) {
             return saveAs();
         } else {
             return saveFile(curFile);
-        }
+        }*/
 }
 
 bool MainWindow::saveAs()
 {
-    QString fileName = QFileDialog::getSaveFileName(this,
+  /*  QString fileName = QFileDialog::getSaveFileName(this,
                                    tr("Save Table"), ".",
                                    tr("Table files (*.xml)"));
     if (fileName.isEmpty()) return false;
-    return saveFile(fileName);
+    return saveFile(fileName);*/
 }
 
 //work with table ![1]
 void MainWindow::addRecord()
 {
-
+    addDialog->show();
 }
 
 void MainWindow::findRecord()
@@ -97,7 +134,7 @@ void MainWindow::about()
 
 void MainWindow::documentWasModified()
 {
-    setWindowModified(textEdit->document()->isModified());
+  //  setWindowModified(textEdit->document()->isModified());
     updateStatusBar();
 }
 
@@ -161,21 +198,21 @@ void MainWindow::createActions()
 
 void MainWindow::createMenus()
 {
-        fileMenu = menuBar()->addMenu(tr("&File"));
-        fileMenu->addAction(newAction);
-        fileMenu->addAction(openAction);
-        fileMenu->addAction(saveAction);
-        fileMenu->addAction(saveAsAction);
-        fileMenu->addSeparator();
-        fileMenu->addAction(exitAction);
+    fileMenu = menuBar()->addMenu(tr("&File"));
+    fileMenu->addAction(newAction);
+    fileMenu->addAction(openAction);
+    fileMenu->addAction(saveAction);
+    fileMenu->addAction(saveAsAction);
+    fileMenu->addSeparator();
+    fileMenu->addAction(exitAction);
 
-        recordMenu = menuBar()->addMenu(tr("&Record"));
-        recordMenu->addAction(addAction);
-        recordMenu->addAction(findAction);
-        recordMenu->addAction(delAction);
+    recordMenu = menuBar()->addMenu(tr("&Record"));
+    recordMenu->addAction(addAction);
+    recordMenu->addAction(findAction);
+    recordMenu->addAction(delAction);
 
-        helpMenu = menuBar()->addMenu(tr("&Help"));
-        helpMenu->addAction(aboutAction);
+    helpMenu = menuBar()->addMenu(tr("&Help"));
+    helpMenu->addAction(aboutAction);
 }
 
 void MainWindow::createToolBars()
@@ -195,7 +232,7 @@ void MainWindow::createToolBars()
 void MainWindow::createStatusBar()
 {
     statusBar()->showMessage(tr("Ready"));
-    updateStatusBar();
+   // updateStatusBar();
 }
 
 void MainWindow::readSettings()
@@ -220,8 +257,8 @@ void MainWindow::writeSettings()
 
 bool MainWindow::okToContinue()
 {
-    if (!textEdit->document()->isModified())
-        return true;
+   // if (!textEdit->document()->isModified())
+   //     return true;
     const QMessageBox::StandardButton ret
         = QMessageBox::warning(this, tr("Application"),
                                tr("The document has been modified.\n"
@@ -252,7 +289,7 @@ bool MainWindow::loadFile(const QString &fileName)
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    textEdit->setPlainText(in.readAll());
+ //   textEdit->setPlainText(in.readAll());
     QApplication::restoreOverrideCursor();
 
     setCurrentFile(fileName);
@@ -275,7 +312,7 @@ bool MainWindow::saveFile(const QString &fileName)
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    out << textEdit->toPlainText();
+  //  out << textEdit->toPlainText();
 
     QApplication::restoreOverrideCursor();
 
@@ -287,7 +324,7 @@ bool MainWindow::saveFile(const QString &fileName)
 void MainWindow::setCurrentFile(const QString &fileName)
 {
     curFile = fileName;
-    textEdit->document()->setModified(false);
+  //  textEdit->document()->setModified(false);
     setWindowModified(false);
 
     QString shownName = curFile;

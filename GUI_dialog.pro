@@ -17,7 +17,8 @@ HEADERS += \
     adddialog.h \
     finddialog.h \
     deletedialog.h \
-    tablemodel.h
+    tablemodel.h \
+    global.h
 
 RESOURCES += \
     resource.qrc
