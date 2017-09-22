@@ -1,13 +1,15 @@
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    selectdialog.cpp
 
 QT += core gui \
     xml \
     widgets
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+    selectdialog.h
 
 RESOURCES += \
     resource.qrc

@@ -1,6 +1,7 @@
 //main window of GUI application
 
 #include <QtWidgets>
+
 #include "mainwindow.h"
 
 MainWindow::MainWindow()
@@ -39,10 +40,12 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::newFile()
 {
-    if (maybeSave()) {
+    /*if (maybeSave()) {
             textEdit->clear();
             setCurrentFile(QString());
-        }
+        }*/
+    selDialog = new SelectDialog(this);
+    selDialog->show();
 }
 
 void MainWindow::open()

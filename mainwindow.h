@@ -4,6 +4,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "selectdialog.h"
+
 class QAction;
 class QActionGroup;
 class QLabel;
@@ -21,7 +23,7 @@ public:
     void loadFile(const QString &fileName);
 
 protected:
-    void closeEvent(QCloseEvent *event) override;
+    void closeEvent(QCloseEvent *event);
 
 private slots:
     void newFile();
@@ -66,6 +68,10 @@ private:
 
     QPlainTextEdit *textEdit;
     QString curFile;
+
+    SelectDialog *selDialog;
+
+
 };
 #endif // MAINWINDOW_H
 
