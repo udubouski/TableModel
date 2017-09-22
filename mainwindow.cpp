@@ -10,18 +10,14 @@ MainWindow::MainWindow()
     setCentralWidget(textEdit);
 
     createActions();
+    createMenus();
+    createToolBars();
     createStatusBar();
+
     readSettings();
 
-    connect(textEdit->document(), &QTextDocument::contentsChanged,
-            this, &MainWindow::documentWasModified);
-
-    QGuiApplication::setFallbackSessionManagementEnabled(false);
-    connect(qApp, &QGuiApplication::commitDataRequest,
-            this, &MainWindow::commitData);
-
-    setCurrentFile(QString());
-    setUnifiedTitleAndToolBarOnMac(true);
+    setWindowIcon(QIcon(":/pic/icon.png"));
+    setCurrentFile("unnamed");
 
     setWindowTitle(tr("GUI records"));
     setMinimumSize(320, 240);
@@ -30,7 +26,7 @@ MainWindow::MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (maybeSave()) {
+    if (okToContinue()) {
         writeSettings();
         event->accept();
     } else {
@@ -38,19 +34,20 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
 }
 
+
 void MainWindow::newFile()
 {
-    /*if (maybeSave()) {
+    if (okToContinue()) {
             textEdit->clear();
-            setCurrentFile(QString());
-        }*/
-    selDialog = new SelectDialog(this);
-    selDialog->show();
+            setCurrentFile("");
+        }
+    //selDialog = new SelectDialog(this);
+    //selDialog->show();
 }
 
 void MainWindow::open()
 {
-    if (maybeSave()) {
+    if (okToContinue()) {
             QString fileName = QFileDialog::getOpenFileName(this);
             if (!fileName.isEmpty())
                 loadFile(fileName);
@@ -68,12 +65,11 @@ bool MainWindow::save()
 
 bool MainWindow::saveAs()
 {
-    QFileDialog dialog(this);
-    dialog.setWindowModality(Qt::WindowModal);
-    dialog.setAcceptMode(QFileDialog::AcceptSave);
-    if (dialog.exec() != QDialog::Accepted)
-        return false;
-    return saveFile(dialog.selectedFiles().first());
+    QString fileName = QFileDialog::getSaveFileName(this,
+                                   tr("Save Table"), ".",
+                                   tr("Table files (*.xml)"));
+    if (fileName.isEmpty()) return false;
+    return saveFile(fileName);
 }
 
 //work with table ![1]
@@ -102,94 +98,104 @@ void MainWindow::about()
 void MainWindow::documentWasModified()
 {
     setWindowModified(textEdit->document()->isModified());
+    updateStatusBar();
 }
 
+void MainWindow::updateStatusBar()
+{
+
+}
 
 void MainWindow::createActions()
 {
-    //File Menu
-    QMenu *fileMenu = menuBar()->addMenu(tr("File"));
-    QToolBar *fileToolBar = addToolBar(tr("File"));
+    newAction = new QAction(tr("&New"), this);
+    newAction->setIcon(QIcon(":/pic/new.png"));
+    newAction->setShortcut(QKeySequence::New);
+    newAction->setStatusTip(tr("Create a new file"));
+    connect(newAction, &QAction::triggered, this, &MainWindow::newFile);
 
-    const QIcon newIcon = QIcon::fromTheme("document-new", QIcon(":/pic/newFile.png"));
-    newAct = new QAction(newIcon, tr("&New"), this);
-    newAct->setShortcuts(QKeySequence::New);
-    newAct->setStatusTip(tr("Create a new file"));
-    connect(newAct, &QAction::triggered, this, &MainWindow::newFile);
-    fileMenu->addAction(newAct);
-    fileToolBar->addAction(newAct);
+    openAction = new QAction(tr("&Open"), this);
+    openAction->setIcon(QIcon(":/pic/open.png"));
+    openAction->setShortcuts(QKeySequence::Open);
+    openAction->setStatusTip(tr("Open an existing file"));
+    connect(openAction, &QAction::triggered, this, &MainWindow::open);
 
-    const QIcon openIcon = QIcon::fromTheme("document-open", QIcon(":/pic/openFile.png"));
-    openAct = new QAction(openIcon, tr("&Open"), this);
-    openAct->setShortcuts(QKeySequence::Open);
-    openAct->setStatusTip(tr("Open an existing file"));
-    connect(openAct, &QAction::triggered, this, &MainWindow::open);
-    fileMenu->addAction(openAct);
-    fileToolBar->addAction(openAct);
+    saveAction = new QAction(tr("&Save"), this);
+    saveAction->setIcon(QIcon(":/pic/save.png"));
+    saveAction->setShortcuts(QKeySequence::Save);
+    saveAction->setStatusTip(tr("Save the document to disk"));
+    connect(saveAction, &QAction::triggered, this, &MainWindow::save);
 
-    const QIcon saveIcon = QIcon::fromTheme("document-save", QIcon(":/pic/saveFile.png"));
-    saveAct = new QAction(saveIcon, tr("&Save"), this);
-    saveAct->setShortcuts(QKeySequence::Save);
-    saveAct->setStatusTip(tr("Save the document to disk"));
-    connect(saveAct, &QAction::triggered, this, &MainWindow::save);
-    fileMenu->addAction(saveAct);
-    fileToolBar->addAction(saveAct);
+    saveAsAction = new QAction(tr("Save &As"), this);
+    saveAsAction->setIcon(QIcon(":/pic/saveAs.png"));
+    saveAsAction->setShortcuts(QKeySequence::SaveAs);
+    saveAsAction->setStatusTip(tr("Save the document under a new name"));
+    connect(saveAsAction, &QAction::triggered, this, &MainWindow::saveAs);
 
-    const QIcon saveAsIcon = QIcon::fromTheme("document-save-as", QIcon(":/pic/saveFileAs.png"));
-    saveAsAct = new QAction(saveAsIcon, tr("Save &As"), this);
-    saveAsAct->setShortcuts(QKeySequence::SaveAs);
-    saveAsAct->setStatusTip(tr("Save the document under a new name"));
-    connect(saveAsAct, &QAction::triggered, this, &MainWindow::saveAs);
-    fileMenu->addAction(saveAsAct);
-    fileToolBar->addAction(saveAsAct);
+    exitAction = new QAction(tr("E&xit"), this);
+    exitAction->setIcon(QIcon(":/pic/exit.png"));
+    exitAction->setShortcuts(QKeySequence::Quit);
+    exitAction->setStatusTip(tr("Exit the application"));
+    connect(exitAction, &QAction::triggered, this, &QWidget::close);
 
-    fileMenu->addSeparator();
+    addAction = new QAction(tr("Add"), this);
+    addAction->setIcon(QIcon(":/pic/add.png"));
+    addAction->setStatusTip(tr("Add new record"));
+    connect(addAction, &QAction::triggered, this, &MainWindow::addRecord);
 
-    const QIcon exitIcon = QIcon::fromTheme("application-exit", QIcon(":/pic/exit.png"));
-    exitAct = fileMenu->addAction(exitIcon, tr("E&xit"), this, &QWidget::close);
-    exitAct->setShortcuts(QKeySequence::Quit);
-    exitAct->setStatusTip(tr("Exit the application"));
+    findAction = new QAction(tr("Find"), this);
+    findAction->setIcon(QIcon(":/pic/find.png"));
+    findAction->setStatusTip(tr("Find record"));
+    connect(findAction, &QAction::triggered, this, &MainWindow::findRecord);
 
-    //Record Menu
-    QMenu *editMenu = menuBar()->addMenu(tr("Record"));
-    QToolBar *editToolBar = addToolBar(tr("Record"));
+    delAction = new QAction(tr("Delete"), this);
+    delAction->setIcon(QIcon(":/pic/delete.png"));
+    delAction->setStatusTip(tr("Delete existing record"));
+    connect(delAction, &QAction::triggered, this, &MainWindow::delRecord);
 
-    const QIcon addIcon = QIcon::fromTheme("record-add", QIcon(":/pic/add.png"));
-    addAct = new QAction(addIcon, tr("Add"), this);
-    addAct->setStatusTip(tr("Add new record"));
-    connect(addAct, &QAction::triggered, this, &MainWindow::addRecord);
-    editMenu->addAction(addAct);
-    editToolBar->addAction(addAct);
+    aboutAction = new QAction(tr("About"), this);
+    aboutAction->setIcon(QIcon(":/pic/about.png"));
+    aboutAction->setStatusTip(tr("Show the application's About Box"));
+    connect(aboutAction, &QAction::triggered, this, &MainWindow::about);
+}
 
-    const QIcon findIcon = QIcon::fromTheme("record-find", QIcon(":/pic/find.png"));
-    findAct = new QAction(findIcon, tr("Find"), this);
-    findAct->setStatusTip(tr("Find record"));
-    connect(findAct, &QAction::triggered, this, &MainWindow::findRecord);
-    editMenu->addAction(findAct);
-    editToolBar->addAction(findAct);
+void MainWindow::createMenus()
+{
+        fileMenu = menuBar()->addMenu(tr("&File"));
+        fileMenu->addAction(newAction);
+        fileMenu->addAction(openAction);
+        fileMenu->addAction(saveAction);
+        fileMenu->addAction(saveAsAction);
+        fileMenu->addSeparator();
+        fileMenu->addAction(exitAction);
 
-    const QIcon deleteIcon = QIcon::fromTheme("record-delete", QIcon(":/pic/delete.png"));
-    delAct = new QAction(deleteIcon, tr("Delete"), this);
-    delAct->setStatusTip(tr("Delete existing record"));
-    connect(delAct, &QAction::triggered, this, &MainWindow::delRecord);
-    editMenu->addAction(delAct);
-    editToolBar->addAction(delAct);
+        recordMenu = menuBar()->addMenu(tr("&Record"));
+        recordMenu->addAction(addAction);
+        recordMenu->addAction(findAction);
+        recordMenu->addAction(delAction);
 
-    menuBar()->addSeparator();
+        helpMenu = menuBar()->addMenu(tr("&Help"));
+        helpMenu->addAction(aboutAction);
+}
 
-    //Help Menu
-    QMenu *helpMenu = menuBar()->addMenu(tr("Help"));
-    const QIcon aboutIcon = QIcon::fromTheme("help-about", QIcon(":/pic/about.png"));
-    aboutAct = new QAction(aboutIcon, tr("About"), this);
-    aboutAct->setStatusTip(tr("Show the application's About box"));
-    connect(aboutAct, &QAction::triggered, this, &MainWindow::about);
-    helpMenu->addAction(aboutAct);
+void MainWindow::createToolBars()
+{
+    fileToolBar = addToolBar(tr("&File"));
+    fileToolBar->addAction(newAction);
+    fileToolBar->addAction(openAction);
+    fileToolBar->addAction(saveAction);
+    fileToolBar->addAction(saveAsAction);
 
+    recordToolBar = addToolBar(tr("&Edit"));
+    recordToolBar->addAction(addAction);
+    recordToolBar->addAction(findAction);
+    recordToolBar->addAction(delAction);
 }
 
 void MainWindow::createStatusBar()
 {
     statusBar()->showMessage(tr("Ready"));
+    updateStatusBar();
 }
 
 void MainWindow::readSettings()
@@ -212,7 +218,7 @@ void MainWindow::writeSettings()
     settings.setValue("geometry", saveGeometry());
 }
 
-bool MainWindow::maybeSave()
+bool MainWindow::okToContinue()
 {
     if (!textEdit->document()->isModified())
         return true;
@@ -232,14 +238,14 @@ bool MainWindow::maybeSave()
     return true;
 }
 
-void MainWindow::loadFile(const QString &fileName)
+bool MainWindow::loadFile(const QString &fileName)
 {
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
         QMessageBox::warning(this, tr("Application"),
                              tr("Cannot read file %1:\n%2.")
                              .arg(QDir::toNativeSeparators(fileName), file.errorString()));
-        return;
+        return false;
     }
 
     QTextStream in(&file);
@@ -251,6 +257,7 @@ void MainWindow::loadFile(const QString &fileName)
 
     setCurrentFile(fileName);
     statusBar()->showMessage(tr("File loaded"), 2000);
+    return true;
 }
 
 bool MainWindow::saveFile(const QString &fileName)
@@ -294,14 +301,4 @@ QString MainWindow::strippedName(const QString &fullFileName)
     return QFileInfo(fullFileName).fileName();
 }
 
-void MainWindow::commitData(QSessionManager &manager)
-{
-    if (manager.allowsInteraction()) {
-        if (!maybeSave())
-            manager.cancel();
-    } else {
-        // Non-interactive: save without asking
-        if (textEdit->document()->isModified())
-            save();
-    }
-}
+

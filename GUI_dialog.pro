@@ -1,7 +1,11 @@
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    selectdialog.cpp
+    selectdialog.cpp \
+    finddialog.cpp \
+    deletedialog.cpp \
+    adddialog.cpp \
+    tablemodel.cpp
 
 QT += core gui \
     xml \
@@ -9,7 +13,11 @@ QT += core gui \
 
 HEADERS += \
     mainwindow.h \
-    selectdialog.h
+    selectdialog.h \
+    adddialog.h \
+    finddialog.h \
+    deletedialog.h \
+    tablemodel.h
 
 RESOURCES += \
     resource.qrc

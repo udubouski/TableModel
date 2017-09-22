@@ -4,15 +4,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "selectdialog.h"
 
 class QAction;
-class QActionGroup;
-class QLabel;
-class QMenu;
-
+class SelectDialog;
 class QPlainTextEdit;
-class QSessionManager;
 
 class MainWindow : public QMainWindow
 {
@@ -20,7 +15,6 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow();
-    void loadFile(const QString &fileName);
 
 protected:
     void closeEvent(QCloseEvent *event);
@@ -38,40 +32,44 @@ private slots:
     void about();
 
     void documentWasModified();
-    void commitData(QSessionManager &);
+    void updateStatusBar();
 
 private:
     void createActions();
+    void createMenus();
+    void createToolBars();
     void createStatusBar();
+
     void readSettings();
     void writeSettings();
-    bool maybeSave();
 
+    bool okToContinue();
+    bool loadFile(const QString &fileName);
     bool saveFile(const QString &fileName);
     void setCurrentFile(const QString &fileName);
+    void updateRecentFileActions();
     QString strippedName(const QString &fullFileName);
 
-    QMenu *fileMenu;
-    QAction *newAct;
-    QAction *openAct;
-    QAction *saveAct;
-    QAction *saveAsAct;
-    QAction *exitAct;
-
-    QMenu *recordMenu;
-    QAction *addAct;
-    QAction *findAct;
-    QAction *delAct;
-
-    QMenu *helpMenu;
-    QAction *aboutAct;
-
-    QPlainTextEdit *textEdit;
-    QString curFile;
-
     SelectDialog *selDialog;
+    QString curFile;
+    QPlainTextEdit *textEdit;
 
+    QMenu *fileMenu;
+    QMenu *recordMenu;
+    QMenu *helpMenu;
 
+    QToolBar *fileToolBar;
+    QToolBar *recordToolBar;
+
+    QAction *newAction;
+    QAction *openAction;
+    QAction *saveAction;
+    QAction *saveAsAction;
+    QAction *exitAction;
+    QAction *addAction;
+    QAction *findAction;
+    QAction *delAction;
+    QAction *aboutAction;
 };
 #endif // MAINWINDOW_H
 
