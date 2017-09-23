@@ -9,12 +9,9 @@ class QLabel;
 
 class AddDialog : public QDialog
 {
+
 public:
     AddDialog(QWidget *parent=0);
-
-//signals:
-
-//private slots:
 
 private:
     QLabel *labelStudent;

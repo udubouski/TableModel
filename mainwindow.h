@@ -6,10 +6,10 @@
 #include <QMainWindow>
 
 class QAction;
-class SelectDialog;
-class AddDialog;
 class QTableView;
 class TableModel;
+class SelectDialog;
+class AddDialog;
 
 class MainWindow : public QMainWindow
 {
@@ -36,33 +36,14 @@ private slots:
 
     void about();
 
-    void documentWasModified();
-    void updateStatusBar();
-
 private:
-    void createWidget();
     void createActions();
     void createMenus();
     void createToolBars();
+    void createToolPages();
     void createStatusBar();
 
-    void readSettings();
-    void writeSettings();
-
-    bool okToContinue();
-    bool loadFile(const QString &fileName);
-    bool saveFile(const QString &fileName);
-    void setCurrentFile(const QString &fileName);
-    void updateRecentFileActions();
-    QString strippedName(const QString &fullFileName);
-
     QString curFile;
-
-    SelectDialog *selDialog;
-    AddDialog *addDialog;
-
-    QTableView *tableView;
-    TableModel *model;
 
     QMenu *fileMenu;
     QMenu *recordMenu;
@@ -76,10 +57,23 @@ private:
     QAction *saveAction;
     QAction *saveAsAction;
     QAction *exitAction;
+
     QAction *addAction;
     QAction *findAction;
     QAction *delAction;
+
     QAction *aboutAction;
+
+    QAction *firstPageAction;
+    QAction *lastPageAction;
+    QAction *prevPageAction;
+    QAction *nextPageAction;
+
+    QTableView *tableView;
+    TableModel *model;
+
+    SelectDialog *selDialog;
+    AddDialog *addDialog;
 };
 #endif // MAINWINDOW_H
 
