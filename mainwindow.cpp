@@ -151,14 +151,59 @@ void MainWindow::createStatusBar()
 
 void MainWindow::createConnections()
 {
+
+   /* connect(model,
+        SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
+        this, SLOT(setDirty()));
+
+    connect(model, SIGNAL(rowsRemoved(const QModelIndex&,int,int)),
+            this, SLOT(setDirty()));
+    connect(model, SIGNAL(modelReset()), this, SLOT(setDirty()));
+*/
+    /*connect(countyGroupBox, SIGNAL(toggled(bool)),
+            this, SLOT(updateUi()));
+    connect(countyComboBox,
+            SIGNAL(currentIndexChanged(const QString&)),
+            this, SLOT(updateUi()));
+    connect(stateGroupBox, SIGNAL(toggled(bool)),
+            this, SLOT(updateUi()));
+    connect(stateComboBox,
+            SIGNAL(currentIndexChanged(const QString&)),
+            this, SLOT(updateUi()));
+    connect(minimumZipSpinBox, SIGNAL(valueChanged(int)),
+            this, SLOT(updateUi()));
+    connect(maximumZipSpinBox, SIGNAL(valueChanged(int)),
+            this, SLOT(updateUi()));
+
+    foreach (QRadioButton *radioButton, QList<QRadioButton*>()
+             << dontFilterOrSelectRadioButton << filterRadioButton
+             << selectByCriteriaRadioButton)
+        connect(radioButton, SIGNAL(clicked()),
+                this, SLOT(radioButtonClicked()));
+
+    connect(tableView, SIGNAL(clicked(const QModelIndex&)),
+            this, SLOT(selectionChanged()));
+    connect(tableView->selectionModel(),
+            SIGNAL(currentChanged(const QModelIndex&,
+                                  const QModelIndex&)),
+            this, SLOT(selectionChanged()));
+
+    connect(tableView->horizontalHeader(),
+            SIGNAL(sectionClicked(int)),
+            tableView, SLOT(sortByColumn(int)));
+*/
+
+
     connect(newAction, &QAction::triggered, this, &MainWindow::newFile);
     connect(openAction, &QAction::triggered, this, &MainWindow::open);
     connect(saveAction, &QAction::triggered, this, &MainWindow::save);
     connect(saveAsAction, &QAction::triggered, this, &MainWindow::saveAs);
     connect(exitAction, &QAction::triggered, this, &QWidget::close);
+
     connect(addAction, &QAction::triggered, this, &MainWindow::addRecord);
     connect(findAction, &QAction::triggered, this, &MainWindow::findRecord);
     connect(delAction, &QAction::triggered, this, &MainWindow::delRecord);
+
     connect(aboutAction, &QAction::triggered, this, &MainWindow::about);
 
 }

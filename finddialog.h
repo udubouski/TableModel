@@ -20,6 +20,8 @@ public:
     FindDialog(TableModel *model,QWidget *parent=0);
 
 private slots:
+    void updateUi();
+    void setDirty() { setWindowModified(true); }
 
 private:
     void createWidget();
@@ -27,6 +29,9 @@ private:
     void createComboBoxModels();
     void createComboBoxModel(QComboBox* comboBox,int column);
     void restoreFilters();
+    void restoreFilters2();
+    void restoreFilters3();
+    void restoreFilters4();
 
     TableModel *model;
     ProxyModel *proxyModel;

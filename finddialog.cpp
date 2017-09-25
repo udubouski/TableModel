@@ -32,10 +32,14 @@ void FindDialog::createWidget()
     lineStudent = new QComboBox;
     lineFather = new QComboBox;
     lineMoneyFatherDown = new QSpinBox;
+    lineMoneyFatherDown->setRange(MinCode,MaxCode);
     lineMoneyFatherUp = new QSpinBox;
+    lineMoneyFatherUp->setRange(MinCode,MaxCode);
     lineMother = new QComboBox;
     lineMoneyMotherDown = new QSpinBox;
     lineMoneyMotherUp = new QSpinBox;
+    lineMoneyMotherDown->setRange(MinCode,MaxCode);
+    lineMoneyMotherUp->setRange(MinCode,MaxCode);
     lineNumberBrother = new QComboBox;
     lineNumberSister = new QComboBox;
 
@@ -48,7 +52,7 @@ void FindDialog::createWidget()
     QVBoxLayout *vbox1 = new QVBoxLayout;
     vbox1->addWidget(labelStudent);
     vbox1->addWidget(lineStudent);
-    QGroupBox *box1 = new QGroupBox(tr("Student"));
+    box1 = new QGroupBox(tr("Student"));
     box1->setCheckable(true);
     box1->setChecked(false);
     box1->setLayout(vbox1);
@@ -59,7 +63,7 @@ void FindDialog::createWidget()
     vbox2->addWidget(lineFather);
     vbox2->addWidget(labelMother);
     vbox2->addWidget(lineMother);
-    QGroupBox *box2 = new QGroupBox(tr("Parents"));
+    box2 = new QGroupBox(tr("Parents"));
     box2->setCheckable(true);
     box2->setChecked(false);
     box2->setLayout(vbox2);
@@ -70,7 +74,7 @@ void FindDialog::createWidget()
     vbox3->addWidget(lineNumberBrother);
     vbox3->addWidget(labelNumberSister);
     vbox3->addWidget(lineNumberSister);
-    QGroupBox *box3 = new QGroupBox(tr("Number brothers or sisters"));
+    box3 = new QGroupBox(tr("Number brothers or sisters"));
     box3->setCheckable(true);
     box3->setChecked(false);
     box3->setLayout(vbox3);
@@ -85,7 +89,7 @@ void FindDialog::createWidget()
     vbox4->addWidget(lineMoneyMotherDown);
     vbox4->addWidget(labelMotherTo);
     vbox4->addWidget(lineMoneyMotherUp);
-    QGroupBox *box4 = new QGroupBox(tr("Money parents"));
+    box4 = new QGroupBox(tr("Money parents"));
     box4->setCheckable(true);
     box4->setChecked(false);
     box4->setLayout(vbox4);
@@ -95,8 +99,8 @@ void FindDialog::createWidget()
     grid->addWidget(butCancel,2,1);
 
     resultTable = new QTableView;
+    resultTable->setModel(proxyModel);
     resultTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    resultTable->setModel(model);
 
     main->addLayout(grid);
     main->addWidget(resultTable);
@@ -105,12 +109,10 @@ void FindDialog::createWidget()
 void FindDialog::createComboBoxModels()
 {
     createComboBoxModel(lineStudent,0);
-    /*
     createComboBoxModel(lineFather,1);
     createComboBoxModel(lineMother,3);
     createComboBoxModel(lineNumberBrother,5);
     createComboBoxModel(lineNumberSister,6);
-   // createComboBoxModel();*/
 }
 
 void FindDialog::createComboBoxModel(QComboBox *comboBox, int column)
@@ -125,7 +127,105 @@ void FindDialog::createComboBoxModel(QComboBox *comboBox, int column)
 
 void FindDialog::createConnections()
 {
-    connect(butFind,SIGNAL(clicked()),this,SLOT(close()));
+    connect(butFind,SIGNAL(clicked()),this,SLOT(updateUi()));
     connect(butCancel,SIGNAL(clicked()),this,SLOT(close()));
+
+    connect(model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),this, SLOT(setDirty()));
+    connect(model, SIGNAL(rowsRemoved(const QModelIndex&,int,int)),
+               this, SLOT(setDirty()));
+    connect(model, SIGNAL(modelReset()), this, SLOT(setDirty()));
+
+    connect(box1, SIGNAL(toggled(bool)),this, SLOT(updateUi()));
+    connect(lineStudent,SIGNAL(currentIndexChanged(const QString&)),this, SLOT(updateUi()));
+
+    connect(box2, SIGNAL(toggled(bool)),this, SLOT(updateUi()));
+    connect(lineFather,SIGNAL(currentIndexChanged(const QString&)),this, SLOT(updateUi()));
+    connect(lineFather,SIGNAL(currentIndexChanged(const QString&)),this, SLOT(updateUi()));
+
+    connect(box3, SIGNAL(toggled(bool)),this, SLOT(updateUi()));
+    connect(lineNumberBrother,SIGNAL(currentIndexChanged(const QString&)),this, SLOT(updateUi()));
+    connect(lineNumberSister,SIGNAL(currentIndexChanged(const QString&)),this, SLOT(updateUi()));
+
+    connect(box4, SIGNAL(toggled(bool)),this, SLOT(updateUi()));
+    connect(lineMoneyFatherDown,SIGNAL(valueChanged(int)),this, SLOT(updateUi()));
+    connect(lineMoneyFatherUp,SIGNAL(valueChanged(int)),this, SLOT(updateUi()));
+    connect(lineMoneyMotherDown,SIGNAL(valueChanged(int)),this, SLOT(updateUi()));
+    connect(lineMoneyMotherUp,SIGNAL(valueChanged(int)),this, SLOT(updateUi()));
+
+    connect(resultTable, SIGNAL(clicked(const QModelIndex&)),
+                this, SLOT(selectionChanged()));
+    connect(resultTable->selectionModel(),
+                SIGNAL(currentChanged(const QModelIndex&,
+                                      const QModelIndex&)),
+                this, SLOT(selectionChanged()));
+
+    connect(resultTable->horizontalHeader(),
+                SIGNAL(sectionClicked(int)),
+                resultTable, SLOT(sortByColumn(int)));
+}
+
+void FindDialog::updateUi()
+{
+    if (box1->isChecked())
+            restoreFilters();
+    else if (box2->isChecked())
+        restoreFilters2();
+    else if (box3->isChecked())
+        restoreFilters3();
+    else if (box4->isChecked())
+        restoreFilters4();
+    else proxyModel->clearFilters();
+}
+
+void FindDialog::restoreFilters()
+{
+    proxyModel->setStudent(box1->isChecked()
+                ? lineStudent->currentText() : QString());
+}
+
+void FindDialog::restoreFilters2()
+{
+    if (box2->isChecked())
+    {
+        proxyModel->setFather(lineFather->currentText());
+        proxyModel->setMother(lineMother->currentText());
+    }
+    else
+    {
+        proxyModel->setFather(QString());
+        proxyModel->setMother(QString());
+    }
+}
+
+void FindDialog::restoreFilters3()
+{
+    if (box3->isChecked())
+    {
+         proxyModel->setNumberBrothers(lineNumberBrother->currentText().toInt());
+         proxyModel->setNumberSisters(lineNumberSister->currentText().toInt());
+    }
+    else
+    {
+        proxyModel->setNumberBrothers(0);
+        proxyModel->setNumberSisters(0);
+    }
+}
+
+void FindDialog::restoreFilters4()
+{
+    if (box4->isChecked())
+    {
+        proxyModel->setMinMoneyFather(lineMoneyFatherDown->value());
+        proxyModel->setMaxMoneyFather(lineMoneyFatherUp->value());
+        proxyModel->setMinMoneyMother(lineMoneyMotherDown->value());
+        proxyModel->setMaxMoneyMother(lineMoneyMotherUp->value());
+    }
+    else
+    {
+        proxyModel->setMinMoneyFather(0);
+        proxyModel->setMaxMoneyFather(0);
+        proxyModel->setMinMoneyMother(0);
+        proxyModel->setMaxMoneyMother(0);
+    }
 }
 

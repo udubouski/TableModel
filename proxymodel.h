@@ -24,7 +24,7 @@ public slots:
     void clearFilters();
 
     void setNumberBrothers(int numberBrothers);
-    void setNumberSisters(int   numberSisters);
+    void setNumberSisters(int numberSisters);
     void setMinMoneyFather(int minMoneyFather);
     void setMaxMoneyFather(int maxMoneyFather);
     void setMinMoneyMother(int minMoneyMother);
