@@ -22,7 +22,6 @@ public:
     bool var13() const;
     bool var14() const;
 
-
 signals:
     void sendData(QString str);
 
@@ -30,6 +29,9 @@ private slots:
     void onButtonSend();
 
 private:
+    void createWidget();
+    void createLayout();
+    void createConnections();
 
     QGroupBox *box;
     QRadioButton *rad10ch;

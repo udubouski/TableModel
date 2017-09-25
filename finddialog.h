@@ -30,9 +30,8 @@ private:
     void createComboBoxModel(QComboBox* comboBox,int column);
     void restoreFilters();
 
-   // TableModel *model;
     TableModel *model;
-    ProxyModel *proxyModel;
+
 
     QTableView *resultTable;
 

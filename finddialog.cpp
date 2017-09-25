@@ -6,8 +6,8 @@
 FindDialog::FindDialog(TableModel *model_,QWidget *parent) : QDialog(parent)
 {
     model=model_;
-    proxyModel = new ProxyModel(this);
-    proxyModel->setSourceModel(model);
+    //proxyModel = new ProxyModel(this);
+    //proxyModel->setSourceModel(model);
 
     createWidgets();
     createComboBoxModels();
@@ -96,7 +96,7 @@ void FindDialog::createWidgets()
 
     resultTable = new QTableView;
     resultTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    resultTable->setModel(proxyModel);
+    resultTable->setModel(model);
 
     main->addLayout(grid);
     main->addWidget(resultTable);
@@ -152,4 +152,10 @@ void FindDialog::restoreFilters()
             ? stateComboBox->currentText() : QString());
     reportFilterEffect();
     */
+}
+
+void FindDialog::boxClicked()
+{
+   /* if (box1->isChecked()) updateUi();
+    else ProxyModel->clearFilters();*/
 }

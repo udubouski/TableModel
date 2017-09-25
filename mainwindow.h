@@ -6,6 +6,7 @@
 #include <QMainWindow>
 
 class QAction;
+
 class QTableView;
 class TableModel;
 class ProxyModel;
@@ -24,10 +25,9 @@ protected:
     void closeEvent(QCloseEvent *event);
 
 public slots:
-    void recieveData(QString str);
-    void acceptDateModel(QString fioStudent,QString fioFather, QString moneyFather,
-                         QString fioMother, QString moneyMother,
-                         QString numBrother, const QString numSister);
+    void recieveVariant(QString str);
+    void recieveData(QString student, QString father, int moneyfather, QString mother, int moneymother,
+                     int numberbrothers, int numbersisters);
 
 private slots:
     void newFile();
@@ -42,12 +42,13 @@ private slots:
     void about();
 
 private:
-    void createDialogs();
+    void createWidget();
     void createActions();
     void createMenus();
     void createToolBars();
-    void createToolPages();
+    //void createToolPages();
     void createStatusBar();
+    void createConnections();
 
     QString curFile;
 

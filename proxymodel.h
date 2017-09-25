@@ -8,7 +8,8 @@ class ProxyModel : public QSortFilterProxyModel
     Q_OBJECT
 
 public:
-    ProxyModel(QObject *parent=0);
+    explicit ProxyModel(QObject *parent=0);
+
 };
 
 #endif // PROXYMODEL_H

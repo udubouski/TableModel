@@ -3,6 +3,16 @@
 
 AddDialog::AddDialog(QWidget *parent) : QDialog(parent)
 {
+    createWidget();
+    createLayout();
+    createConnections();
+
+    setWindowTitle("Add record");
+    setFixedHeight(sizeHint().height());
+}
+
+void AddDialog::createWidget()
+{
     labelStudent = new QLabel(tr("Student"));
     labelFather = new QLabel(tr("Father"));
     labelMoneyFather = new QLabel(tr("Money father"));
@@ -18,12 +28,19 @@ AddDialog::AddDialog(QWidget *parent) : QDialog(parent)
     lineMoneyMother = new QLineEdit;
     lineNumberBrother = new QLineEdit;
     lineNumberSister = new QLineEdit;
+
     butAdd = new QPushButton(tr("Add"));
     butCancel = new QPushButton(tr("Cancel"));
+}
 
-    connect(butAdd,SIGNAL(clicked()),this,SLOT(onButtonSend()));
+void AddDialog::createConnections()
+{
+    connect(butAdd,SIGNAL(clicked()),this,SLOT(addRecord()));
     connect(butCancel,SIGNAL(clicked()),this,SLOT(close()));
+}
 
+void AddDialog::createLayout()
+{
     QVBoxLayout *lbox = new QVBoxLayout;
     lbox->addWidget(labelStudent);
     lbox->addWidget(labelFather);
@@ -54,13 +71,11 @@ AddDialog::AddDialog(QWidget *parent) : QDialog(parent)
     mainlayout->addLayout(fbox);
     mainlayout->addLayout(hbox);
     setLayout(mainlayout);
-
-    setWindowTitle("Add record");
-    setFixedHeight(sizeHint().height());
 }
 
-void AddDialog::onButtonSend()
+void AddDialog::addRecord()
 {
-    emit sendData(lineStudent->text(),lineFather->text(),lineMoneyFather->text(),lineMother->text(),lineMoneyMother->text(),lineNumberBrother->text(),lineNumberSister->text());
+    emit sendData(lineStudent->text(),lineFather->text(),lineMoneyFather->text().toInt(),lineMother->text(),
+                  lineMoneyMother->text().toInt(),lineNumberBrother->text().toInt(),lineNumberSister->text().toInt());
     this->close();
 }

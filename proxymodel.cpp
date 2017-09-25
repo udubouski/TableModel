@@ -4,5 +4,3 @@ ProxyModel::ProxyModel(QObject *parent) : QSortFilterProxyModel(parent)
 {
 }
 
-
-

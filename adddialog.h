@@ -15,14 +15,17 @@ public:
     AddDialog(QWidget *parent=0);
 
 signals:
-    void sendData(QString fioStudent, QString fioFather,  QString moneyFather,
-                  QString fioMother,  QString moneyMother,
-                  QString numBrother, QString numSister);
+    void sendData(QString student, QString father, int moneyfather, QString mother, int moneymother,
+                  int numberbrothers, int numbersisters);
 
 private slots:
-    void onButtonSend();
+    void addRecord();
 
 private:
+    void createWidget();
+    void createLayout();
+    void createConnections();
+
     QLabel *labelStudent;
     QLabel *labelFather;
     QLabel *labelMoneyFather;

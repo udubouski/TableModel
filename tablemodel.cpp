@@ -354,7 +354,7 @@ void TableModel::load(const QString &filename)
         persons << item;
     }
     qSort(persons);
-    reset();
+    //reset();
 }
 
 
@@ -377,4 +377,5 @@ void TableModel::save(const QString &filename)
     while (i.hasNext())
         out << i.next();
 }
+
 

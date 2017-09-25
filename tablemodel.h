@@ -48,7 +48,7 @@ class TableModel : public QAbstractTableModel
     Q_OBJECT
 
 public:
-    TableModel(QObject *parent=0) : QAbstractTableModel(parent) {}
+    explicit TableModel(QObject *parent=0) : QAbstractTableModel(parent) {}
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
     QVariant data(const QModelIndex &index, int role=Qt::DisplayRole) const;

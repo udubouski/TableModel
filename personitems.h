@@ -6,7 +6,7 @@
 
 struct PersonItem
 {
-   PersonItem(const QString &student_ = QString(),
+   explicit PersonItem(const QString &student_ = QString(),
             const QString &father_= QString(),
             int moneyFather_ = InvalidCode,
             const QString &mother_= QString(),

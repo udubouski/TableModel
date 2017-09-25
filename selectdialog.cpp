@@ -5,6 +5,17 @@
 
 SelectDialog::SelectDialog(QWidget *parent) : QDialog(parent)
 {
+    createWidget();
+    createLayout();
+    createConnections();
+
+    setWindowTitle("Select dialog");
+    setFixedHeight(sizeHint().height());
+
+}
+
+void SelectDialog::createWidget()
+{
     box = new QGroupBox(tr("Select variant of task"));
 
     rad10ch = new QRadioButton(tr("Variant 10"));
@@ -16,9 +27,10 @@ SelectDialog::SelectDialog(QWidget *parent) : QDialog(parent)
     butOk = new QPushButton(tr("OK"));
     butCancel = new QPushButton(tr("Cancel"));
 
-    connect(butOk,SIGNAL(clicked()),this,SLOT(onButtonSend()));
-    connect(butCancel,SIGNAL(clicked()),this,SLOT(close()));
+}
 
+void SelectDialog::createLayout()
+{
     QVBoxLayout *vbox = new QVBoxLayout;
     vbox->addWidget(rad10ch);
     vbox->addWidget(rad11ch);
@@ -35,9 +47,6 @@ SelectDialog::SelectDialog(QWidget *parent) : QDialog(parent)
     mainlayout->addWidget(box);
     mainlayout->addLayout(hbox);
     setLayout(mainlayout);
-
-    setWindowTitle("Select dialog");
-    setFixedHeight(sizeHint().height());
 }
 
 bool SelectDialog::var10() const
@@ -64,7 +73,6 @@ bool SelectDialog::var14() const
 {
     return rad14ch->isChecked();
 }
-
 
 void SelectDialog::onButtonSend()
 {
@@ -98,3 +106,10 @@ void SelectDialog::onButtonSend()
         this->close();
     }
 }
+
+void SelectDialog::createConnections()
+{
+    connect(butOk,SIGNAL(clicked()),this,SLOT(onButtonSend()));
+    connect(butCancel,SIGNAL(clicked()),this,SLOT(close()));
+}
+
