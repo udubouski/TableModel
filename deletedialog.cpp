@@ -231,11 +231,10 @@ void DeleteDialog::delRecord()
                 selectionModel->currentIndex());
         if (!index.isValid())
             return;
-      /*  QString s_student = model->data(model->index(index.row(),
-                                  Student));
+
         if (!okToDelete(this, tr("Delete Person"),
-                tr("Delete Zipcode %1?").arg(s_student, 5, 10, QChar('0'))))
-            return;*/
+                tr("Delete Person %1?").arg(index.row()+1, 5, 10, QChar('0'))))
+            return;
 
         bool b_box1=box1->isChecked();
         bool b_box2=box2->isChecked();
@@ -312,7 +311,7 @@ void DeleteDialog::delRecord()
             box4->setChecked(false);
 }
 
-bool okToDelete(QWidget *parent, const QString &title,
+bool DeleteDialog::okToDelete(QWidget *parent, const QString &title,
                 const QString &text, const QString &detailedText)
 {
     QScopedPointer<QMessageBox> messageBox(new QMessageBox(parent));

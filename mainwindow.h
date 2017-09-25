@@ -32,6 +32,7 @@ public slots:
 private slots:
     void newFile();
     void open();
+    //void open(const QString &filename);
     bool save();
     bool saveAs();
 
@@ -42,6 +43,7 @@ private slots:
     void about();
 
 private:
+    void enableButtons(bool enable=true);
     void createWidget();
     void createActions();
     void createMenus();
@@ -51,7 +53,7 @@ private:
     void createConnections();
 
     QString curFile;
-
+    bool loading;
     QMenu *fileMenu;
     QMenu *recordMenu;
     QMenu *helpMenu;

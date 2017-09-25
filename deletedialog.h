@@ -25,8 +25,7 @@ private slots:
     void delRecord();
 
 private:
-    bool okToDelete(QWidget *parent, const QString &title,
-            const QString &text, const QString &detailedText=QString());
+    bool okToDelete(QWidget *parent, const QString &title,const QString &text, const QString &detailedText=QString());
     void createWidget();
     void createConnections();
     void createComboBoxModels();
