@@ -226,7 +226,8 @@ void MainWindow::addRecord()
 
 void MainWindow::findRecord()
 {
-
+    findDialog = new FindDialog(model,this);
+    findDialog->show();
 }
 
 void MainWindow::delRecord()

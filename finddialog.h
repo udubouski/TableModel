@@ -20,18 +20,16 @@ public:
     FindDialog(TableModel *model,QWidget *parent=0);
 
 private slots:
-    void updateUi();
-    void boxClicked();
 
 private:
-    void createWidgets();
+    void createWidget();
     void createConnections();
     void createComboBoxModels();
     void createComboBoxModel(QComboBox* comboBox,int column);
     void restoreFilters();
 
     TableModel *model;
-
+    ProxyModel *proxyModel;
 
     QTableView *resultTable;
 

@@ -6,10 +6,10 @@
 FindDialog::FindDialog(TableModel *model_,QWidget *parent) : QDialog(parent)
 {
     model=model_;
-    //proxyModel = new ProxyModel(this);
-    //proxyModel->setSourceModel(model);
+    proxyModel = new ProxyModel(this);
+    proxyModel->setSourceModel(model);
 
-    createWidgets();
+    createWidget();
     createComboBoxModels();
     createConnections();
 
@@ -17,7 +17,7 @@ FindDialog::FindDialog(TableModel *model_,QWidget *parent) : QDialog(parent)
     setFixedHeight(sizeHint().height());
 }
 
-void FindDialog::createWidgets()
+void FindDialog::createWidget()
 {
     labelStudent = new QLabel(tr("Student"));
     labelFather = new QLabel(tr("Father"));
@@ -127,35 +127,5 @@ void FindDialog::createConnections()
 {
     connect(butFind,SIGNAL(clicked()),this,SLOT(close()));
     connect(butCancel,SIGNAL(clicked()),this,SLOT(close()));
-
-    connect(lineStudent, SIGNAL(toggled(bool)),this, SLOT(updateUi()));
-   // connect(box1,SIGNAL(currentIndexChanged(const QString&)),this, SLOT(updateUi()));
-    connect(box1, SIGNAL(clicked()),this, SLOT(boxClicked()));
 }
 
-void FindDialog::updateUi()
-{
-    if (box1->isChecked())
-        restoreFilters();
-    else
-       return;
-}
-
-void FindDialog::restoreFilters()
-{
- /*   proxyModel
-    proxyModel->setMinimumZipcode(minimumZipSpinBox->value());
-    proxyModel->setMaximumZipcode(maximumZipSpinBox->value());
-    proxyModel->setCounty(countyGroupBox->isChecked()
-            ? countyComboBox->currentText() : QString());
-    proxyModel->setState(stateGroupBox->isChecked()
-            ? stateComboBox->currentText() : QString());
-    reportFilterEffect();
-    */
-}
-
-void FindDialog::boxClicked()
-{
-   /* if (box1->isChecked()) updateUi();
-    else ProxyModel->clearFilters();*/
-}
