@@ -5,7 +5,9 @@ SOURCES += \
     finddialog.cpp \
     deletedialog.cpp \
     adddialog.cpp \
-    tablemodel.cpp
+    tablemodel.cpp \
+    proxymodel.cpp \
+    uniqueproxymodel.cpp
 
 QT += core gui \
     xml \
@@ -17,7 +19,11 @@ HEADERS += \
     adddialog.h \
     finddialog.h \
     deletedialog.h \
-    tablemodel.h
+    tablemodel.h \
+    proxymodel.h \
+    uniqueproxymodel.h \
+    personitems.h \
+    global.h
 
 RESOURCES += \
     resource.qrc

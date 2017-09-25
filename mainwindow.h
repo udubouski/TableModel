@@ -8,6 +8,7 @@
 class QAction;
 class QTableView;
 class TableModel;
+class ProxyModel;
 class SelectDialog;
 class AddDialog;
 class FindDialog;
@@ -41,6 +42,7 @@ private slots:
     void about();
 
 private:
+    void createDialogs();
     void createActions();
     void createMenus();
     void createToolBars();
@@ -75,6 +77,7 @@ private:
 
     QTableView *view;
     TableModel *model;
+    ProxyModel *proxyModel;
 
     SelectDialog *selDialog;
     AddDialog *addDialog;

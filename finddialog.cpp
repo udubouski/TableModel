@@ -1,13 +1,24 @@
 #include <QtWidgets>
 #include "finddialog.h"
+#include "proxymodel.h"
+#include "uniqueproxymodel.h"
 
-FindDialog::FindDialog(QWidget *parent) : QDialog(parent)
+FindDialog::FindDialog(TableModel *model_,QWidget *parent) : QDialog(parent)
 {
-    fioStudent = new QRadioButton(tr("Student"));
-    fioParents = new QRadioButton(tr("Parents"));
-    numChildrens = new QRadioButton(tr("Number children"));
-    moneyParents = new QRadioButton(tr("Money parents"));
+    model=model_;
+    proxyModel = new ProxyModel(this);
+    proxyModel->setSourceModel(model);
 
+    createWidgets();
+    createComboBoxModels();
+    createConnections();
+
+    setWindowTitle("Find record");
+    setFixedHeight(sizeHint().height());
+}
+
+void FindDialog::createWidgets()
+{
     labelStudent = new QLabel(tr("Student"));
     labelFather = new QLabel(tr("Father"));
     labelMother = new QLabel(tr("Mother"));
@@ -18,16 +29,20 @@ FindDialog::FindDialog(QWidget *parent) : QDialog(parent)
     labelNumberBrother = new QLabel(tr("Number brother"));
     labelNumberSister = new QLabel  (tr("Number sister"));
 
-    lineStudent = new QLineEdit;
-    lineFather = new QLineEdit;
-    lineMoneyFatherDown = new QLineEdit;
-    lineMoneyFatherUp = new QLineEdit;
-    lineMother = new QLineEdit;
-    lineMoneyMotherDown = new QLineEdit;
-    lineMoneyMotherUp = new QLineEdit;
-    lineNumberBrother = new QLineEdit;
-    lineNumberSister = new QLineEdit;
+    lineStudent = new QComboBox;
+    lineFather = new QComboBox;
+    lineMoneyFatherDown = new QSpinBox;
+    lineMoneyFatherUp = new QSpinBox;
+    lineMother = new QComboBox;
+    lineMoneyMotherDown = new QSpinBox;
+    lineMoneyMotherUp = new QSpinBox;
+    lineNumberBrother = new QComboBox;
+    lineNumberSister = new QComboBox;
 
+    butFind = new QPushButton(tr("Find"));
+    butCancel = new QPushButton(tr("Cancel"));
+
+    QHBoxLayout *main = new QHBoxLayout;
     QGridLayout *grid = new QGridLayout;
 
     QVBoxLayout *vbox1 = new QVBoxLayout;
@@ -76,19 +91,65 @@ FindDialog::FindDialog(QWidget *parent) : QDialog(parent)
     box4->setLayout(vbox4);
     grid->addWidget(box4,1,1);
 
-    butFind = new QPushButton(tr("Find"));
-    butCancel = new QPushButton(tr("Cancel"));
     grid->addWidget(butFind,2,0);
     grid->addWidget(butCancel,2,1);
-    setLayout(grid);
 
+    resultTable = new QTableView;
+    resultTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    resultTable->setModel(proxyModel);
+
+    main->addLayout(grid);
+    main->addWidget(resultTable);
+    setLayout(main);
+}
+void FindDialog::createComboBoxModels()
+{
+    createComboBoxModel(lineStudent,0);
+    /*
+    createComboBoxModel(lineFather,1);
+    createComboBoxModel(lineMother,3);
+    createComboBoxModel(lineNumberBrother,5);
+    createComboBoxModel(lineNumberSister,6);
+   // createComboBoxModel();*/
+}
+
+void FindDialog::createComboBoxModel(QComboBox *comboBox, int column)
+{
+    delete comboBox->model();
+    UniqueProxyModel *uniqueProxyModel = new UniqueProxyModel(column,this);
+    uniqueProxyModel->setSourceModel(model);
+    uniqueProxyModel->sort(column,Qt::AscendingOrder);
+    comboBox->setModel(uniqueProxyModel);
+    comboBox->setModelColumn(column);
+}
+
+void FindDialog::createConnections()
+{
     connect(butFind,SIGNAL(clicked()),this,SLOT(close()));
     connect(butCancel,SIGNAL(clicked()),this,SLOT(close()));
 
-    setWindowTitle("Find record");
-    setFixedHeight(sizeHint().height());
+    connect(lineStudent, SIGNAL(toggled(bool)),this, SLOT(updateUi()));
+   // connect(box1,SIGNAL(currentIndexChanged(const QString&)),this, SLOT(updateUi()));
+    connect(box1, SIGNAL(clicked()),this, SLOT(boxClicked()));
 }
 
+void FindDialog::updateUi()
+{
+    if (box1->isChecked())
+        restoreFilters();
+    else
+       return;
+}
 
-
-
+void FindDialog::restoreFilters()
+{
+ /*   proxyModel
+    proxyModel->setMinimumZipcode(minimumZipSpinBox->value());
+    proxyModel->setMaximumZipcode(maximumZipSpinBox->value());
+    proxyModel->setCounty(countyGroupBox->isChecked()
+            ? countyComboBox->currentText() : QString());
+    proxyModel->setState(stateGroupBox->isChecked()
+            ? stateComboBox->currentText() : QString());
+    reportFilterEffect();
+    */
+}

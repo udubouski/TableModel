@@ -3,26 +3,21 @@
 #include <QtWidgets>
 #include "mainwindow.h"
 #include "tablemodel.h"
+#include "proxymodel.h"
 #include "selectdialog.h"
 #include "adddialog.h"
 #include "finddialog.h"
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
 {
-    //MODEL & VIEW [1
-    view = new QTableView;
-    view->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    view->setModel( model = new TableModel );
-
+    //MODELS [1]
+    model = new TableModel(this);
+    proxyModel = new ProxyModel(this);
+    proxyModel->setSourceModel(model);
     // ![1]
-    selDialog = new SelectDialog(this);
-    connect(selDialog, SIGNAL(sendData(QString)), this, SLOT(recieveData(QString)));
 
-    addDialog = new AddDialog(this);
-    connect(addDialog,SIGNAL(sendData(QString,QString,QString,QString,QString,QString,QString)), this, SLOT(acceptDateModel(QString,QString,QString,QString,QString,QString,QString)));
-
-    findDialog = new FindDialog(this);
-
+    findDialog=0;
+    createDialogs();
     createActions();
     createMenus();
     createToolBars();
@@ -34,7 +29,13 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     resize(640, 480);
 }
 
+void MainWindow::createDialogs()
+{
+    view = new QTableView;
+    view->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    view->setModel(proxyModel);
 
+}
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     event->accept();
@@ -42,6 +43,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::newFile()
 {
+    selDialog = new SelectDialog(this);
+    connect(selDialog, SIGNAL(sendData(QString)), this, SLOT(recieveData(QString)));
     selDialog->show();
 }
 
@@ -62,11 +65,14 @@ bool MainWindow::saveAs()
 
 void MainWindow::addRecord()
 {
+    addDialog = new AddDialog(this);
+    connect(addDialog,SIGNAL(sendData(QString,QString,QString,QString,QString,QString,QString)), this, SLOT(acceptDateModel(QString,QString,QString,QString,QString,QString,QString)));
     addDialog->show();
 }
 
 void MainWindow::findRecord()
 {
+    findDialog = new FindDialog(model,this);
     findDialog->show();
 }
 
