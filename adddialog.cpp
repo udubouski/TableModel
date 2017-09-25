@@ -21,7 +21,7 @@ AddDialog::AddDialog(QWidget *parent) : QDialog(parent)
     butAdd = new QPushButton(tr("Add"));
     butCancel = new QPushButton(tr("Cancel"));
 
-    connect(butAdd,SIGNAL(clicked()),this,SLOT(close()));
+    connect(butAdd,SIGNAL(clicked()),this,SLOT(onButtonSend()));
     connect(butCancel,SIGNAL(clicked()),this,SLOT(close()));
 
     QVBoxLayout *lbox = new QVBoxLayout;
@@ -57,4 +57,10 @@ AddDialog::AddDialog(QWidget *parent) : QDialog(parent)
 
     setWindowTitle("Add record");
     setFixedHeight(sizeHint().height());
+}
+
+void AddDialog::onButtonSend()
+{
+    emit sendData(lineStudent->text(),lineFather->text(),lineMoneyFather->text(),lineMother->text(),lineMoneyMother->text(),lineNumberBrother->text(),lineNumberSister->text());
+    this->close();
 }

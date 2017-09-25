@@ -9,9 +9,18 @@ class QLabel;
 
 class AddDialog : public QDialog
 {
+    Q_OBJECT
 
 public:
     AddDialog(QWidget *parent=0);
+
+signals:
+    void sendData(QString fioStudent, QString fioFather,  QString moneyFather,
+                  QString fioMother,  QString moneyMother,
+                  QString numBrother, QString numSister);
+
+private slots:
+    void onButtonSend();
 
 private:
     QLabel *labelStudent;

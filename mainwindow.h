@@ -10,6 +10,7 @@ class QTableView;
 class TableModel;
 class SelectDialog;
 class AddDialog;
+class FindDialog;
 
 class MainWindow : public QMainWindow
 {
@@ -23,6 +24,9 @@ protected:
 
 public slots:
     void recieveData(QString str);
+    void acceptDateModel(QString fioStudent,QString fioFather, QString moneyFather,
+                         QString fioMother, QString moneyMother,
+                         QString numBrother, const QString numSister);
 
 private slots:
     void newFile();
@@ -69,11 +73,13 @@ private:
     QAction *prevPageAction;
     QAction *nextPageAction;
 
-    QTableView *tableView;
+    QTableView *view;
     TableModel *model;
 
     SelectDialog *selDialog;
     AddDialog *addDialog;
+    FindDialog *findDialog;
+
 };
 #endif // MAINWINDOW_H
 

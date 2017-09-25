@@ -1,18 +1,27 @@
 //main window of GUI application
 
 #include <QtWidgets>
-
 #include "mainwindow.h"
 #include "tablemodel.h"
 #include "selectdialog.h"
 #include "adddialog.h"
+#include "finddialog.h"
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
 {
+    //MODEL & VIEW [1
+    view = new QTableView;
+    view->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    view->setModel( model = new TableModel );
+
+    // ![1]
     selDialog = new SelectDialog(this);
     connect(selDialog, SIGNAL(sendData(QString)), this, SLOT(recieveData(QString)));
 
     addDialog = new AddDialog(this);
+    connect(addDialog,SIGNAL(sendData(QString,QString,QString,QString,QString,QString,QString)), this, SLOT(acceptDateModel(QString,QString,QString,QString,QString,QString,QString)));
+
+    findDialog = new FindDialog(this);
 
     createActions();
     createMenus();
@@ -24,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     setMinimumSize(320, 240);
     resize(640, 480);
 }
+
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
@@ -57,7 +67,7 @@ void MainWindow::addRecord()
 
 void MainWindow::findRecord()
 {
-
+    findDialog->show();
 }
 
 void MainWindow::delRecord()
@@ -72,7 +82,9 @@ void MainWindow::about()
 
 void MainWindow::recieveData(QString str)
 {
-    if (str=="var10")  QMessageBox::about(this, tr("About Dialog"),tr("Var 10"));
+    if (str=="var10")  setCentralWidget(view);
+
+        //QMessageBox::about(this, tr("About Dialog"),tr("Var 10"));
 
     else if (str=="var11")  QMessageBox::about(this, tr("About Dialog"),tr("Var 11"));
 
@@ -85,6 +97,15 @@ void MainWindow::recieveData(QString str)
 
     else QMessageBox::about(this, tr("About Dialog"),            tr("Var 14"));
 
+}
+
+void MainWindow::acceptDateModel(QString fioStudent,  QString fioFather,  QString moneyFather,
+                                 QString fioMother,  QString moneyMother,
+                                QString numBrother,  QString numSister)
+{
+    model->appendPerson(fioStudent, fioFather, moneyFather,
+                        fioMother, moneyMother,
+                        numBrother, numSister);
 }
 
 void MainWindow::createActions()
