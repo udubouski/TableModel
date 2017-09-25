@@ -7,6 +7,7 @@
 #include "selectdialog.h"
 #include "adddialog.h"
 #include "finddialog.h"
+#include "deletedialog.h"
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
 {
@@ -19,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     selDialog =0;
     addDialog =0;
     findDialog =0;
+    delDialog =0;
 
     createActions();
     createMenus();
@@ -121,7 +123,7 @@ void MainWindow::createToolBars()
     fileToolBar->addAction(saveAction);
     fileToolBar->addAction(saveAsAction);
 
-    recordToolBar = addToolBar(tr("&Edit"));
+    recordToolBar = addToolBar(tr("&Record"));
     recordToolBar->addAction(addAction);
     recordToolBar->addAction(findAction);
     recordToolBar->addAction(delAction);
@@ -151,49 +153,6 @@ void MainWindow::createStatusBar()
 
 void MainWindow::createConnections()
 {
-
-   /* connect(model,
-        SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
-        this, SLOT(setDirty()));
-
-    connect(model, SIGNAL(rowsRemoved(const QModelIndex&,int,int)),
-            this, SLOT(setDirty()));
-    connect(model, SIGNAL(modelReset()), this, SLOT(setDirty()));
-*/
-    /*connect(countyGroupBox, SIGNAL(toggled(bool)),
-            this, SLOT(updateUi()));
-    connect(countyComboBox,
-            SIGNAL(currentIndexChanged(const QString&)),
-            this, SLOT(updateUi()));
-    connect(stateGroupBox, SIGNAL(toggled(bool)),
-            this, SLOT(updateUi()));
-    connect(stateComboBox,
-            SIGNAL(currentIndexChanged(const QString&)),
-            this, SLOT(updateUi()));
-    connect(minimumZipSpinBox, SIGNAL(valueChanged(int)),
-            this, SLOT(updateUi()));
-    connect(maximumZipSpinBox, SIGNAL(valueChanged(int)),
-            this, SLOT(updateUi()));
-
-    foreach (QRadioButton *radioButton, QList<QRadioButton*>()
-             << dontFilterOrSelectRadioButton << filterRadioButton
-             << selectByCriteriaRadioButton)
-        connect(radioButton, SIGNAL(clicked()),
-                this, SLOT(radioButtonClicked()));
-
-    connect(tableView, SIGNAL(clicked(const QModelIndex&)),
-            this, SLOT(selectionChanged()));
-    connect(tableView->selectionModel(),
-            SIGNAL(currentChanged(const QModelIndex&,
-                                  const QModelIndex&)),
-            this, SLOT(selectionChanged()));
-
-    connect(tableView->horizontalHeader(),
-            SIGNAL(sectionClicked(int)),
-            tableView, SLOT(sortByColumn(int)));
-*/
-
-
     connect(newAction, &QAction::triggered, this, &MainWindow::newFile);
     connect(openAction, &QAction::triggered, this, &MainWindow::open);
     connect(saveAction, &QAction::triggered, this, &MainWindow::save);
@@ -205,6 +164,18 @@ void MainWindow::createConnections()
     connect(delAction, &QAction::triggered, this, &MainWindow::delRecord);
 
     connect(aboutAction, &QAction::triggered, this, &MainWindow::about);
+
+   /* connect(view->horizontalHeader(),
+            SIGNAL(sectionClicked(int)),
+            view, SLOT(sortByColumn(int)));
+
+    connect(model,
+        SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
+        this, SLOT(setDirty()));
+
+    connect(model, SIGNAL(rowsRemoved(const QModelIndex&,int,int)),
+            this, SLOT(setDirty()));
+    connect(model, SIGNAL(modelReset()), this, SLOT(setDirty()));*/
 
 }
 
@@ -277,7 +248,8 @@ void MainWindow::findRecord()
 
 void MainWindow::delRecord()
 {
-
+    delDialog = new DeleteDialog(model,this);
+    delDialog->show();
 }
 
 void MainWindow::about()

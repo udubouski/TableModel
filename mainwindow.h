@@ -6,13 +6,13 @@
 #include <QMainWindow>
 
 class QAction;
-
 class QTableView;
 class TableModel;
 class ProxyModel;
 class SelectDialog;
 class AddDialog;
 class FindDialog;
+class DeleteDialog;
 
 class MainWindow : public QMainWindow
 {
@@ -83,6 +83,7 @@ private:
     SelectDialog *selDialog;
     AddDialog *addDialog;
     FindDialog *findDialog;
+    DeleteDialog *delDialog;
 
 };
 #endif // MAINWINDOW_H

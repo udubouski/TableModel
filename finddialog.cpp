@@ -26,8 +26,8 @@ void FindDialog::createWidget()
     labelFatherTo = new QLabel(tr("to"));
     labelMotherFrom = new QLabel(tr("Mother money from"));
     labelMotherTo = new QLabel(tr("to"));
-    labelNumberBrother = new QLabel(tr("Number brother"));
-    labelNumberSister = new QLabel  (tr("Number sister"));
+    labelNumberBrother = new QLabel(tr("Number brothers"));
+    labelNumberSister = new QLabel  (tr("Number sisters"));
 
     lineStudent = new QComboBox;
     lineFather = new QComboBox;
@@ -144,7 +144,7 @@ void FindDialog::createConnections()
 
     connect(box3, SIGNAL(toggled(bool)),this, SLOT(updateUi()));
     connect(lineNumberBrother,SIGNAL(currentIndexChanged(const QString&)),this, SLOT(updateUi()));
-    connect(lineNumberSister,SIGNAL(currentIndexChanged(const QString&)),this, SLOT(updateUi()));
+  //  connect(lineNumberSister,SIGNAL(currentIndexChanged(const QString&)),this, SLOT(updateUi()));
 
     connect(box4, SIGNAL(toggled(bool)),this, SLOT(updateUi()));
     connect(lineMoneyFatherDown,SIGNAL(valueChanged(int)),this, SLOT(updateUi()));
@@ -152,12 +152,12 @@ void FindDialog::createConnections()
     connect(lineMoneyMotherDown,SIGNAL(valueChanged(int)),this, SLOT(updateUi()));
     connect(lineMoneyMotherUp,SIGNAL(valueChanged(int)),this, SLOT(updateUi()));
 
-    connect(resultTable, SIGNAL(clicked(const QModelIndex&)),
+    /*connect(resultTable, SIGNAL(clicked(const QModelIndex&)),
                 this, SLOT(selectionChanged()));
     connect(resultTable->selectionModel(),
                 SIGNAL(currentChanged(const QModelIndex&,
                                       const QModelIndex&)),
-                this, SLOT(selectionChanged()));
+                this, SLOT(selectionChanged()));*/
 
     connect(resultTable->horizontalHeader(),
                 SIGNAL(sectionClicked(int)),
@@ -202,12 +202,12 @@ void FindDialog::restoreFilters3()
     if (box3->isChecked())
     {
          proxyModel->setNumberBrothers(lineNumberBrother->currentText().toInt());
-         proxyModel->setNumberSisters(lineNumberSister->currentText().toInt());
+         //proxyModel->setNumberSisters(lineNumberSister->currentText().toInt());
     }
     else
     {
         proxyModel->setNumberBrothers(0);
-        proxyModel->setNumberSisters(0);
+       // proxyModel->setNumberSisters(0);
     }
 }
 
