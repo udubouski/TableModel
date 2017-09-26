@@ -99,6 +99,7 @@ void TableModel::appendPerson( const QString& fioStudent, const QString& fioFath
 #include <QFile>
 #include <QFontMetrics>
 #include <QStyleOptionComboBox>
+#include <QtXml>
 
 
 namespace {
@@ -354,7 +355,7 @@ bool TableModel::readFile(const QString &filename)
 }
 
 
-bool TableModel::writeFile(const QString &filename)
+/*bool TableModel::writeFile(const QString &filename)
 {
     if (!filename.isEmpty())
         m_filename = filename;
@@ -373,10 +374,83 @@ bool TableModel::writeFile(const QString &filename)
     while (i.hasNext())
         out << i.next();
     return true;
-}
+}*/
 
 void TableModel::clear()
 {
     removeRows(0,rowCount());
 }
+
+void TableModel::writeFile(const QString &filename)
+{
+    QDomDocument doc("table10");
+    QDomElement  domElement = doc.createElement("table");
+    doc.appendChild(domElement);
+
+    //{}
+
+
+    for (int i =0;i<rowCount();++i)
+    {
+        QStringList list;
+        QModelIndex indexe;
+        for (int j = 0;j<MaxColumns;++j)
+        {
+            indexe = index(i,j,QModelIndex());
+            list<<data(indexe,Qt::DisplayRole).toString();
+        }
+        QDomElement contact=record(doc,list[0],list[1],list[2],list[3],list[4],list[5],list[6]);
+        domElement.appendChild(contact);
+    }
+
+    //QDomElement contact1 =record(doc, "Piggy", "Sasha", "3000", "Masha","2000","2","3");
+
+    //{}!
+
+    QFile file(filename);
+    if(file. open (QIODevice::WriteOnly)) {
+        QTextStream(&file)<< doc.toString ();
+        file.close ();
+    }
+}
+
+QDomElement TableModel::makeElement(QDomDocument& domDoc,const QString& strName,const QString& strAttr,const QString& strText )
+{
+    QDomElement domElement = domDoc.createElement(strName);
+
+    if (!strAttr.isEmpty()) {
+        QDomAttr domAttr = domDoc.createAttribute("number");
+        domAttr.setValue(strAttr);
+        domElement.setAttributeNode(domAttr);
+    }
+
+    if (!strText.isEmpty()) {
+        QDomText domText = domDoc.createTextNode(strText);
+        domElement.appendChild(domText);
+    }
+    return domElement;
+}
+
+QDomElement TableModel::record(QDomDocument& domDoc,const QString& strStudent,const QString& strFather,const QString& strMoneyFather,
+const QString& strMother,const QString& strMoneyMother,const QString& strNumberBrothers,const QString& strNumberSisters)
+{
+    static int nNumber = 1;
+
+    QDomElement domElement = makeElement(domDoc, "row", QString().setNum(nNumber),"");
+
+    domElement.appendChild(makeElement(domDoc, "student", "", strStudent));
+    domElement.appendChild(makeElement(domDoc, "father", "", strFather));
+    domElement.appendChild(makeElement(domDoc, "moneyFather", "", strMoneyFather));
+    domElement.appendChild(makeElement(domDoc, "mother", "", strMother));
+    domElement.appendChild(makeElement(domDoc, "moneyMother", "", strMoneyMother));
+    domElement.appendChild(makeElement(domDoc, "numberBrothers", "", strNumberBrothers));
+    domElement.appendChild(makeElement(domDoc, "numberSisters", "", strNumberSisters));
+
+    nNumber++;
+
+    return domElement;
+}
+
+
+
 

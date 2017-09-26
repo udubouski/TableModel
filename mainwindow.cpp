@@ -247,11 +247,12 @@ void MainWindow::open()
 
 bool MainWindow::save()
 {
-    if (curFile.isEmpty()) {
+    /*if (curFile.isEmpty()) {
         return saveAs();
     } else {
         return saveFile(curFile);
-    }
+    }*/
+    model->writeFile("file.xml");
 }
 
 bool MainWindow::saveAs()
@@ -392,7 +393,7 @@ bool MainWindow::saveFile(const QString &fileName)
         statusBar()->showMessage(tr("Saving canceled"), 2000);
         return false;
     }*/
-    model->writeFile();
+    model->writeFile(fileName);
 
     setCurrentFile(fileName);
     statusBar()->showMessage(tr("File saved"), 2000);

@@ -3,6 +3,7 @@
 
 #include "personitems.h"
 #include <QAbstractTableModel>
+#include <QtXml>
 
 class TableModel : public QAbstractTableModel
 {
@@ -30,9 +31,20 @@ public:
 
     QString filename() const { return m_filename; }
     bool readFile(const QString &filename=QString());
-    bool writeFile(const QString &filename=QString());
+    //bool writeFile(const QString &filename=QString());
+    void writeFile(const QString &filename);
     void clear();
 
+    QDomElement makeElement(QDomDocument& domDoc, const QString& strName, const QString& strAttr,const QString& strText );
+
+    QDomElement record(QDomDocument& domDoc,
+                        const QString&      strStudent,
+                        const QString&      strFather,
+                        const QString&      strMoneyFather,
+                        const QString&      strMother,
+                        const QString&      strMoneyMother,
+                        const QString&      strNumberBrothers,
+                        const QString&      strNumberSisters);
 private:
     QString m_filename;
     QList<PersonItem> persons;
