@@ -32,7 +32,6 @@ public slots:
 private slots:
     void newFile();
     void open();
-    //void open(const QString &filename);
     bool save();
     bool saveAs();
 

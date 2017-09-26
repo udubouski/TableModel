@@ -1,7 +1,7 @@
 //main window of GUI application
 
 #include <QtWidgets>
-#include "aqp.hpp"
+
 #include "mainwindow.h"
 #include "tablemodel.h"
 #include "proxymodel.h"
@@ -10,7 +10,6 @@
 #include "finddialog.h"
 #include "deletedialog.h"
 
-const int StatusTimeout = AQP::MSecPerSecond * 10;
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent),loading(false)
 {
@@ -225,76 +224,13 @@ void MainWindow::newFile()
 
 void MainWindow::open()
 {
-    //if (true)
-      //      return;
-        QString filename(model->filename());
-        QString dir(filename.isEmpty() ? QString(".")
-                    : QFileInfo(filename).canonicalPath());
-        filename = QFileDialog::getOpenFileName(this,
-                tr("%1 - Open").arg(QApplication::applicationName()),
-                dir,
-                tr("%1 (*.dat)").arg(QApplication::applicationName()));
-        if (filename.isEmpty())
-            return;
 
-        //enableButtons(false);
-        QMetaObject::invokeMethod(this, "load", Qt::QueuedConnection,
-                                  Q_ARG(QString, filename));
 }
 
-/*
-void MainWindow::enableButtons(bool enable)
-{
-    foreach(QPushButton *button, QList<QPushButton*>() << loadButton
-            << saveButton << addButton << deleteButton) {
-        button->setEnabled(enable);
-        button->repaint(); // update isn't "strong" enough on non-Mac
-    }
-}*/
-
-/*void MainWindow::open(const QString &filename)
-{
-    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-    loading = true;
-    try {
-        model->load(filename);
-        view->resizeColumnsToContents();
-        QHeaderView *header = view->horizontalHeader();
-        header->setSortIndicatorShown(true);
-        header->setSortIndicator(0, Qt::AscendingOrder);
-        setWindowModified(false);
-        setWindowTitle(tr("%1 - %2[*]")
-                .arg(QApplication::applicationName())
-                .arg(QFileInfo(filename).fileName()));
-        statusBar()->showMessage(tr("Loaded %n person(s) from %1",
-                "", model->rowCount()).arg(filename), StatusTimeout);
-    } catch (AQP::Error &error) {
-        AQP::warning(this, tr("Error"), tr("Failed to load %1: %2")
-                .arg(filename).arg(QString::fromUtf8(error.what())));
-    }
-    loading = false;
-    view->setFocus();
-   // enableButtons();
-    QApplication::restoreOverrideCursor();
-}*/
 
 bool MainWindow::save()
 {
-    try {
-        model->save();
-        setWindowModified(false);
-        setWindowTitle(tr("%1 - %2[*]")
-                .arg(QApplication::applicationName())
-                .arg(QFileInfo(model->filename()).fileName()));
-        statusBar()->showMessage(tr("Saved %1")
-                .arg(model->filename()), StatusTimeout);
-        return true;
-    } catch (AQP::Error &error) {
-        AQP::warning(this, tr("Error"), tr("Failed to save %1: %2")
-                .arg(model->filename())
-                .arg(QString::fromUtf8(error.what())));
-        return false;
-    }
+
 }
 
 bool MainWindow::saveAs()
@@ -359,7 +295,6 @@ void MainWindow::recieveData(QString student, QString father, int moneyfather, Q
 
     index = proxyModel->index(proxyModel->rowCount()-1, 6, QModelIndex());
     model->setData(index,numbersisters, Qt::EditRole);
-
 }
 
 
