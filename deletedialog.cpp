@@ -127,6 +127,7 @@ void DeleteDialog::createComboBoxModel(QComboBox *comboBox, int column)
 
 void DeleteDialog::createConnections()
 {
+    connect(butDelete, SIGNAL(clicked()),this,SLOT(onButtonSend()));
     connect(butDelete,SIGNAL(clicked()),this,SLOT(delRecord()));
     connect(butCancel,SIGNAL(clicked()),this,SLOT(close()));
 
@@ -331,4 +332,9 @@ bool DeleteDialog::okToDelete(QWidget *parent, const QString &title,
             qobject_cast<QPushButton*>(deleteButton));
     messageBox->exec();
     return messageBox->clickedButton() == deleteButton;
+}
+
+void DeleteDialog::onButtonSend()
+{
+    emit sendSignal(true);
 }

@@ -238,7 +238,7 @@ void MainWindow::open()
     if (okToContinue()) {
         QString fileName = QFileDialog::getOpenFileName(this,
                                    tr("Open Table"), ".",
-                                   tr("Table files (*.xml)"));
+                                   tr("XML files (*.xml)"));
         if (!fileName.isEmpty())
             loadFile(fileName);
     }
@@ -247,19 +247,19 @@ void MainWindow::open()
 
 bool MainWindow::save()
 {
-    /*if (curFile.isEmpty()) {
+    if (curFile.isEmpty()) {
         return saveAs();
     } else {
         return saveFile(curFile);
-    }*/
-    model->writeFile("file.xml");
+    }
+
 }
 
 bool MainWindow::saveAs()
 {
     QString fileName = QFileDialog::getSaveFileName(this,
                                tr("Save Table"), ".",
-                               tr("Table files (*.xml)"));
+                               tr("XML files (*.xml)"));
     if (fileName.isEmpty())
         return false;
 
@@ -287,6 +287,7 @@ void MainWindow::findRecord()
 void MainWindow::delRecord()
 {
     delDialog = new DeleteDialog(model,this);
+    connect(delDialog,SIGNAL(sendSignal(bool)),this, SLOT(recSignal(bool)));
     delDialog->show();
     delDialog->raise();
     delDialog->activateWindow();
@@ -299,14 +300,6 @@ void MainWindow::about()
 
 void MainWindow::recieveData(QString student, QString father, int moneyfather, QString mother, int moneymother, int numberbrothers, int numbersisters)
 {
-    /*if (!model->insertRow(model->rowCount()))
-    return;
-    view->scrollToBottom();
-    view->setFocus();
-    QModelIndex index = proxyModel->index(proxyModel->rowCount() - 1, Student);
-    view->setCurrentIndex(index);
-    view->edit(index);
-*/
     model->insertRows(model->rowCount(), 1, QModelIndex());
 
     QModelIndex index = proxyModel->index(proxyModel->rowCount()-1, 0, QModelIndex());
@@ -333,7 +326,7 @@ void MainWindow::recieveData(QString student, QString father, int moneyfather, Q
 
 void MainWindow::updateStatusBar(const QString &str)
 {
-    statusBar()->showMessage(str,10);
+    statusBar()->showMessage(str,2000);
 }
 
 void MainWindow::documentWasModified()
@@ -389,12 +382,10 @@ bool MainWindow::loadFile(const QString &fileName)
 
 bool MainWindow::saveFile(const QString &fileName)
 {
-  /* if (!model->writeFile(fileName)) {
+   if (!model->writeFile(fileName)) {
         statusBar()->showMessage(tr("Saving canceled"), 2000);
         return false;
-    }*/
-    model->writeFile(fileName);
-
+    }
     setCurrentFile(fileName);
     statusBar()->showMessage(tr("File saved"), 2000);
     return true;
@@ -418,4 +409,12 @@ void MainWindow::setCurrentFile(const QString &fileName)
 QString MainWindow::strippedName(const QString &fullFileName)
 {
     return QFileInfo(fullFileName).fileName();
+}
+
+void MainWindow::recSignal(bool chec)
+{
+    if (chec==true)
+    {
+       documentWasModified();
+    }
 }

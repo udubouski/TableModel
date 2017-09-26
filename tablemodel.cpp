@@ -320,75 +320,19 @@ bool TableModel::removeRows(int row, int count, const QModelIndex&)
 
 bool TableModel::readFile(const QString &filename)
 {
-    if (!filename.isEmpty())
-        m_filename = filename;
-    if (m_filename.isEmpty())
-    {}
-        //throw AQP::Error(tr("no filename specified"));
-    QFile file(m_filename);
-    if (!file.open(QIODevice::ReadOnly)) {}
-      //  throw AQP::Error(file.errorString());
 
-    QDataStream in(&file);
-    qint32 magicNumber;
-    in >> magicNumber;
-    if (magicNumber != MagicNumber)
-            {}
-       // throw AQP::Error(tr("unrecognized file type"));
-
-    qint16 formatVersionNumber;
-    in >> formatVersionNumber;
-    if (formatVersionNumber > FormatNumber)
-     //   throw AQP::Error(tr("file format version is too new"));
-    {}
-    in.setVersion(QDataStream::Qt_4_5);
-    persons.clear();
-
-    PersonItem item;
-    while (!in.atEnd()) {
-        in >> item;
-        persons << item;
-    }
-    qSort(persons);
-    //reset();
-    return true;
 }
-
-
-/*bool TableModel::writeFile(const QString &filename)
-{
-    if (!filename.isEmpty())
-        m_filename = filename;
-    if (m_filename.isEmpty())
-    {}
-       // throw AQP::Error(tr("no filename specified"));
-    QFile file(m_filename);
-    if (!file.open(QIODevice::WriteOnly))
-    {}
-        //throw AQP::Error(file.errorString());
-
-    QDataStream out(&file);
-    out << MagicNumber << FormatNumber;
-    out.setVersion(QDataStream::Qt_4_5);
-    QListIterator<PersonItem> i(persons);
-    while (i.hasNext())
-        out << i.next();
-    return true;
-}*/
 
 void TableModel::clear()
 {
     removeRows(0,rowCount());
 }
 
-void TableModel::writeFile(const QString &filename)
+bool TableModel::writeFile(const QString &filename)
 {
     QDomDocument doc("table10");
     QDomElement  domElement = doc.createElement("table");
     doc.appendChild(domElement);
-
-    //{}
-
 
     for (int i =0;i<rowCount();++i)
     {
@@ -402,10 +346,6 @@ void TableModel::writeFile(const QString &filename)
         QDomElement contact=record(doc,list[0],list[1],list[2],list[3],list[4],list[5],list[6]);
         domElement.appendChild(contact);
     }
-
-    //QDomElement contact1 =record(doc, "Piggy", "Sasha", "3000", "Masha","2000","2","3");
-
-    //{}!
 
     QFile file(filename);
     if(file. open (QIODevice::WriteOnly)) {
@@ -435,7 +375,6 @@ QDomElement TableModel::record(QDomDocument& domDoc,const QString& strStudent,co
 const QString& strMother,const QString& strMoneyMother,const QString& strNumberBrothers,const QString& strNumberSisters)
 {
     static int nNumber = 1;
-
     QDomElement domElement = makeElement(domDoc, "row", QString().setNum(nNumber),"");
 
     domElement.appendChild(makeElement(domDoc, "student", "", strStudent));

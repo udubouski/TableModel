@@ -30,9 +30,8 @@ public:
                     const QModelIndex &parent=QModelIndex());
 
     QString filename() const { return m_filename; }
-    bool readFile(const QString &filename=QString());
-    //bool writeFile(const QString &filename=QString());
-    void writeFile(const QString &filename);
+    bool readFile(const QString &filename);
+    bool writeFile(const QString &filename);
     void clear();
 
     QDomElement makeElement(QDomDocument& domDoc, const QString& strName, const QString& strAttr,const QString& strText );

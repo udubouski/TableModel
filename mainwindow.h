@@ -28,6 +28,7 @@ public slots:
     void recieveVariant(QString str);
     void recieveData(QString student, QString father, int moneyfather, QString mother, int moneymother,
                      int numberbrothers, int numbersisters);
+    void recSignal(bool chec);
 
 private slots:
     void newFile();

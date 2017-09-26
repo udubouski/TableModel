@@ -19,7 +19,11 @@ class DeleteDialog : public QDialog
 public:
     DeleteDialog (TableModel *model,QWidget *parent=0);
 
+signals:
+    void sendSignal(bool ch);
+
 private slots:
+    void onButtonSend();
     void updateUi();
     void setDirty() { setWindowModified(true); }
     void delRecord();
