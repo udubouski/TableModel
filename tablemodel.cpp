@@ -92,7 +92,6 @@ void TableModel::appendPerson( const QString& fioStudent, const QString& fioFath
 
 */
 
-//#include "aqp.hpp"
 #include "global.h"
 #include "tablemodel.h"
 #include <QApplication>
@@ -133,12 +132,8 @@ QDataStream &operator>>(QDataStream &in, PersonItem &item)
 Qt::ItemFlags TableModel::flags(const QModelIndex &index) const
 {
     Qt::ItemFlags theFlags = QAbstractTableModel::flags(index);
-    /*if (index.isValid())
-        theFlags |= Qt::ItemIsSelectable|Qt::ItemIsEditable|
-                    Qt::ItemIsEnabled;*/
     return theFlags;
 }
-
 
 QVariant TableModel::data(const QModelIndex &index, int role) const
 {
@@ -322,7 +317,7 @@ bool TableModel::removeRows(int row, int count, const QModelIndex&)
 }
 
 
-void TableModel::load(const QString &filename)
+bool TableModel::readFile(const QString &filename)
 {
     if (!filename.isEmpty())
         m_filename = filename;
@@ -355,10 +350,11 @@ void TableModel::load(const QString &filename)
     }
     qSort(persons);
     //reset();
+    return true;
 }
 
 
-void TableModel::save(const QString &filename)
+bool TableModel::writeFile(const QString &filename)
 {
     if (!filename.isEmpty())
         m_filename = filename;
@@ -376,6 +372,11 @@ void TableModel::save(const QString &filename)
     QListIterator<PersonItem> i(persons);
     while (i.hasNext())
         out << i.next();
+    return true;
 }
 
+void TableModel::clear()
+{
+    removeRows(0,rowCount());
+}
 

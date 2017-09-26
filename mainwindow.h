@@ -34,12 +34,12 @@ private slots:
     void open();
     bool save();
     bool saveAs();
-
     void addRecord();
     void findRecord();
     void delRecord();
-
     void about();
+    void updateStatusBar(const QString &str);
+    void documentWasModified();
 
 private:
     void enableButtons(bool enable=true);
@@ -51,8 +51,16 @@ private:
     void createStatusBar();
     void createConnections();
 
+    void readSettings();
+    void writeSettings();
+    bool okToContinue();
+    bool loadFile(const QString &fileName);
+    bool saveFile(const QString &fileName);
+    void setCurrentFile(const QString &fileName);
+    QString strippedName(const QString &fullFileName);
+
     QString curFile;
-    bool loading;
+
     QMenu *fileMenu;
     QMenu *recordMenu;
     QMenu *helpMenu;

@@ -10,19 +10,13 @@
 #include "finddialog.h"
 #include "deletedialog.h"
 
-
-MainWindow::MainWindow(QWidget *parent): QMainWindow(parent),loading(false)
+MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
 {
     //MODELS [1]
     model = new TableModel(this);
     proxyModel = new ProxyModel(this);
     proxyModel->setSourceModel(model);
     // ![1]
-
-    selDialog =0;
-    addDialog =0;
-    findDialog =0;
-    delDialog =0;
 
     createActions();
     createMenus();
@@ -31,8 +25,15 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent),loading(false)
     createConnections();
     createWidget();
 
+    readSettings();
+
+    selDialog =0;
+    addDialog =0;
+    findDialog =0;
+    delDialog =0;
+
+    setCurrentFile("");
     setWindowIcon(QIcon(":/pic/icon.png"));
-    setWindowTitle(tr("GUI records"));
     setMinimumSize(320, 240);
     resize(640, 480);
 }
@@ -167,6 +168,10 @@ void MainWindow::createConnections()
 
     connect(aboutAction, &QAction::triggered, this, &MainWindow::about);
 
+ //   connect(model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),this, SLOT(setDirty()));
+    connect(model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),this, SLOT(documentWasModified()));
+    //connect(model, SIGNAL(rowsRemoved(const QModelIndex&,int,int)),
+      //      this, SLOT(setDirty()));
    /* connect(view->horizontalHeader(),
             SIGNAL(sectionClicked(int)),
             view, SLOT(sortByColumn(int)));
@@ -205,37 +210,59 @@ void MainWindow::createWidget()
     setCentralWidget(view);
 }
 
-
-
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (true)
-         event->accept();
-     else
-         event->ignore();
+    if (okToContinue()) {
+        writeSettings();
+        event->accept();
+    } else {
+        event->ignore();
+    }
 }
 
 void MainWindow::newFile()
 {
-    selDialog = new SelectDialog(this);
-    connect(selDialog, SIGNAL(sendData(QString)), this, SLOT(recieveVariant(QString)));
-    selDialog-> show();
+    if (okToContinue()) {
+        model->clear();
+        selDialog = new SelectDialog(this);
+        connect(selDialog, SIGNAL(sendData(QString)), this, SLOT(recieveVariant(QString)));
+        selDialog-> show();
+        selDialog->raise();
+        selDialog->activateWindow();
+        setCurrentFile("");
+    }
 }
 
 void MainWindow::open()
 {
-
+    if (okToContinue()) {
+        QString fileName = QFileDialog::getOpenFileName(this,
+                                   tr("Open Table"), ".",
+                                   tr("Table files (*.xml)"));
+        if (!fileName.isEmpty())
+            loadFile(fileName);
+    }
 }
 
 
 bool MainWindow::save()
 {
-
+    if (curFile.isEmpty()) {
+        return saveAs();
+    } else {
+        return saveFile(curFile);
+    }
 }
 
 bool MainWindow::saveAs()
 {
+    QString fileName = QFileDialog::getSaveFileName(this,
+                               tr("Save Table"), ".",
+                               tr("Table files (*.xml)"));
+    if (fileName.isEmpty())
+        return false;
 
+    return saveFile(fileName);
 }
 
 void MainWindow::addRecord()
@@ -244,18 +271,24 @@ void MainWindow::addRecord()
     connect(addDialog,SIGNAL(sendData(QString,QString,int,QString,int,int,int)),
             this,SLOT(recieveData(QString,QString,int,QString,int,int,int)));
     addDialog->show();
+    addDialog->raise();
+    addDialog->activateWindow();
 }
 
 void MainWindow::findRecord()
 {
     findDialog = new FindDialog(model,this);
     findDialog->show();
+    findDialog->raise();
+    findDialog->activateWindow();
 }
 
 void MainWindow::delRecord()
 {
     delDialog = new DeleteDialog(model,this);
     delDialog->show();
+    delDialog->raise();
+    delDialog->activateWindow();
 }
 
 void MainWindow::about()
@@ -297,4 +330,91 @@ void MainWindow::recieveData(QString student, QString father, int moneyfather, Q
     model->setData(index,numbersisters, Qt::EditRole);
 }
 
+void MainWindow::updateStatusBar(const QString &str)
+{
+    statusBar()->showMessage(str,10);
+}
 
+void MainWindow::documentWasModified()
+{
+    setWindowModified(true);
+    updateStatusBar("Document was modified");
+}
+
+void MainWindow::readSettings()
+{
+    QSettings settings("Software", "Table Model");
+
+    restoreGeometry(settings.value("geometry").toByteArray());
+
+}
+
+void MainWindow::writeSettings()
+{
+    QSettings settings("Software", "Table Model");
+
+    settings.setValue("geometry", saveGeometry());
+
+}
+
+bool MainWindow::okToContinue()
+{
+    if (isWindowModified()) {
+        int r = QMessageBox::warning(this, tr("Table"),
+                        tr("The document has been modified.\n"
+                           "Do you want to save your changes?"),
+                        QMessageBox::Yes | QMessageBox::No
+                        | QMessageBox::Cancel);
+        if (r == QMessageBox::Yes) {
+            return save();
+        } else if (r == QMessageBox::Cancel) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool MainWindow::loadFile(const QString &fileName)
+{
+    if (!model->readFile(fileName)) {
+        statusBar()->showMessage(tr("Loading canceled"), 2000);
+        return false;
+    }
+
+    setCurrentFile(fileName);
+    statusBar()->showMessage(tr("File loaded"), 2000);
+    return true;
+}
+
+bool MainWindow::saveFile(const QString &fileName)
+{
+  /* if (!model->writeFile(fileName)) {
+        statusBar()->showMessage(tr("Saving canceled"), 2000);
+        return false;
+    }*/
+    model->writeFile();
+
+    setCurrentFile(fileName);
+    statusBar()->showMessage(tr("File saved"), 2000);
+    return true;
+}
+
+void MainWindow::setCurrentFile(const QString &fileName)
+{
+    curFile = fileName;
+    setWindowModified(false);
+
+    QString shownName = tr("Untitled");
+    if (!curFile.isEmpty()) {
+        shownName = strippedName(curFile);
+    }
+
+    setWindowTitle(tr("%1[*] - %2").arg(shownName)
+                                   .arg(tr("Table")));
+}
+
+
+QString MainWindow::strippedName(const QString &fullFileName)
+{
+    return QFileInfo(fullFileName).fileName();
+}

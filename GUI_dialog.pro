@@ -7,7 +7,8 @@ SOURCES += \
     adddialog.cpp \
     tablemodel.cpp \
     proxymodel.cpp \
-    uniqueproxymodel.cpp
+    uniqueproxymodel.cpp \
+    parser.cpp
 
 QT += core gui \
     xml \
@@ -23,7 +24,8 @@ HEADERS += \
     proxymodel.h \
     uniqueproxymodel.h \
     personitems.h \
-    global.h
+    global.h \
+    parser.h
 
 RESOURCES += \
     resource.qrc
