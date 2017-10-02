@@ -2,6 +2,7 @@
 #define TABLEMODEL_H
 
 #include "personitems.h"
+#include "saxparser.h"
 #include <QAbstractTableModel>
 #include <QtXml>
 

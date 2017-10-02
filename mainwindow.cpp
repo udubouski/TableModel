@@ -9,6 +9,8 @@
 #include "adddialog.h"
 #include "finddialog.h"
 #include "deletedialog.h"
+#include "saxparser.h"
+#include "record.h"
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
 {
@@ -370,15 +372,40 @@ bool MainWindow::okToContinue()
 
 bool MainWindow::loadFile(const QString &fileName)
 {
-    if (!model->readFile(fileName)) {
+   /* if (!model->readFile(fileName)) {
         statusBar()->showMessage(tr("Loading canceled"), 2000);
         return false;
     }
 
     setCurrentFile(fileName);
     statusBar()->showMessage(tr("File loaded"), 2000);
-    return true;
+    return true;*/
+    Rows rows;
+    QList<Field> fields;
+
+    QFile file(fileName);
+    file.open((QFile::ReadOnly | QFile::Text));
+
+    QXmlStreamReader xmlReader;
+    xmlReader.setDevice(&file);
+    xmlReader.readNext();
+
+    while(!xmlReader.atEnd())
+    {
+        if(xmlReader.isStartElement())
+        {
+            if (xmlReader.name() == "row")
+            {
+                r
+                xmlReader.readNext();
+                if (xmlReader=="record")
+
+            }
+        }
+    }
 }
+
+
 
 bool MainWindow::saveFile(const QString &fileName)
 {
