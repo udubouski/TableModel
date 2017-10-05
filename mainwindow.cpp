@@ -9,7 +9,6 @@
 #include "adddialog.h"
 #include "finddialog.h"
 #include "deletedialog.h"
-#include "saxparser.h"
 #include "record.h"
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
@@ -380,29 +379,7 @@ bool MainWindow::loadFile(const QString &fileName)
     setCurrentFile(fileName);
     statusBar()->showMessage(tr("File loaded"), 2000);
     return true;*/
-    Rows rows;
-    QList<Field> fields;
 
-    QFile file(fileName);
-    file.open((QFile::ReadOnly | QFile::Text));
-
-    QXmlStreamReader xmlReader;
-    xmlReader.setDevice(&file);
-    xmlReader.readNext();
-
-    while(!xmlReader.atEnd())
-    {
-        if(xmlReader.isStartElement())
-        {
-            if (xmlReader.name() == "row")
-            {
-                r
-                xmlReader.readNext();
-                if (xmlReader=="record")
-
-            }
-        }
-    }
 }
 
 

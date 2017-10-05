@@ -1,5 +1,4 @@
 #include "global.h"
-#include "saxparser.h"
 #include "tablemodel.h"
 #include <QApplication>
 #include <QDataStream>
@@ -226,13 +225,14 @@ bool TableModel::removeRows(int row, int count, const QModelIndex&)
 
 bool TableModel::readFile(const QString &filename)
 {
-    TableParser handler;
+ /*   TableParser handler;
     QFile             file(filename);
     QXmlInputSource   source(&file);
     QXmlSimpleReader  reader;
 
     reader.setContentHandler(&handler);
-    reader.parse(source);
+    reader.parse(source);*/
+    return true;
 
 }
 
