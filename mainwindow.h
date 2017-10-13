@@ -4,7 +4,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
+#include "parser.h"
+#include "record.h"
 class QAction;
 class QTableView;
 class TableModel;
@@ -94,6 +95,7 @@ private:
     AddDialog *addDialog;
     FindDialog *findDialog;
     DeleteDialog *delDialog;
+
 
 };
 #endif // MAINWINDOW_H

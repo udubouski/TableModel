@@ -10,6 +10,7 @@
 #include "finddialog.h"
 #include "deletedialog.h"
 #include "record.h"
+#include "parser.h"
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
 {
@@ -375,10 +376,18 @@ bool MainWindow::loadFile(const QString &fileName)
         statusBar()->showMessage(tr("Loading canceled"), 2000);
         return false;
     }
-
+    */
+    Table table;
+    XmlStreamReader reader(&table);
+    reader.readFile(fileName);
     setCurrentFile(fileName);
     statusBar()->showMessage(tr("File loaded"), 2000);
-    return true;*/
+
+    QMessageBox box;
+    Table tablet = reader.getTable();
+    box.setText( tablet.rows[0].fields[0].name);
+    box.exec();
+    return true;
 
 }
 

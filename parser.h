@@ -2,26 +2,31 @@
 #define PARSER_H
 
 #include <QXmlStreamReader>
+#include <QString>
 #include "record.h"
 
 class XmlStreamReader
 {
 public:
-    XmlStreamReader();
+    XmlStreamReader(Table *tableinit);
 
     bool readFile(const QString &fileName);
+    Table getTable() {return table;}
 
 private:
-    void readTableElement();
-    void readRowElement(Row *item);
-    void readFieldElement(Row *item);
-    void readTypeElement(Row *item);
-    void readNameElement(Row *item);
-    void readValueElement(Row *item);
+    void readTableElement(Table *table);
+    void readRowElement(Row row);
+    void readFieldElement(Field field);
+    QString readTypeElement();
+    QString readNameElement();
+    QString readValueElement();
     void skipUnknownElement();
 
     QXmlStreamReader reader;
-    Row row;
+
+    Table *table;
+
+
 
 };
 
