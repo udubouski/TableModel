@@ -8,26 +8,22 @@
 class XmlStreamReader
 {
 public:
-    XmlStreamReader(Table *tableinit);
+    XmlStreamReader();
 
     bool readFile(const QString &fileName);
     Table getTable() {return table;}
 
 private:
-    void readTableElement(Table *table);
-    void readRowElement(Row row);
-    void readFieldElement(Field field);
+    void readTableElement(Table &table);
+    void readRowElement(Row &row);
+    void readFieldElement(Field &field);
     QString readTypeElement();
     QString readNameElement();
     QString readValueElement();
     void skipUnknownElement();
 
     QXmlStreamReader reader;
-
-    Table *table;
-
-
-
+    Table table;
 };
 
 

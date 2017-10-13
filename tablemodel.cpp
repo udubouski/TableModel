@@ -6,6 +6,9 @@
 #include <QFontMetrics>
 #include <QStyleOptionComboBox>
 #include <QtXml>
+#include "parser.h"
+#include "record.h"
+#include <QMessageBox>
 
 namespace {
 const qint32 MagicNumber = 0x5A697043;
@@ -225,13 +228,15 @@ bool TableModel::removeRows(int row, int count, const QModelIndex&)
 
 bool TableModel::readFile(const QString &filename)
 {
- /*   TableParser handler;
-    QFile             file(filename);
-    QXmlInputSource   source(&file);
-    QXmlSimpleReader  reader;
+    XmlStreamReader reader;
+    reader.readFile(filename);
 
-    reader.setContentHandler(&handler);
-    reader.parse(source);*/
+    Table tablet = reader.getTable();
+    QString st=tablet.rows[0].fields[1].name;
+    QMessageBox box;
+    box.setText(st);
+    box.exec();
+
     return true;
 
 }

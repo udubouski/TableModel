@@ -49,7 +49,6 @@ private:
     void createActions();
     void createMenus();
     void createToolBars();
-    //void createToolPages();
     void createStatusBar();
     void createConnections();
 

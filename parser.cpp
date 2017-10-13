@@ -2,9 +2,9 @@
 #include "QtXml"
 #include <QMessageBox>
 
-XmlStreamReader::XmlStreamReader(Table *tableinit)
+XmlStreamReader::XmlStreamReader()
 {
-    table=tableinit;
+
 }
 
 bool XmlStreamReader::readFile(const QString &fileName)
@@ -21,10 +21,7 @@ bool XmlStreamReader::readFile(const QString &fileName)
         if(reader.isStartElement())
         {
             if (reader.name()=="table")
-            {
-                QMessageBox box;
-                box.setText("Table");
-                box.exec();
+            {                
                 readTableElement(table);
 
             } else{
@@ -34,12 +31,11 @@ bool XmlStreamReader::readFile(const QString &fileName)
             reader.readNext();
         }
     }
-
     file.close();
     return true;
 }
 
-void XmlStreamReader::readTableElement(Table *table)
+void XmlStreamReader::readTableElement(Table &table)
 {
     reader.readNext();
     while (!reader.atEnd()) {
@@ -50,12 +46,11 @@ void XmlStreamReader::readTableElement(Table *table)
 
         if (reader.isStartElement()) {
             if (reader.name() == "row") {
-                QMessageBox box;
-                box.setText("Row");
-                box.exec();
+
                 Row row;
                 readRowElement(row);
-                table->rows.append(row);
+                table.rows.append(row);
+
 
             }else {
                 skipUnknownElement();
@@ -66,7 +61,7 @@ void XmlStreamReader::readTableElement(Table *table)
     }
 }
 
-void XmlStreamReader::readRowElement(Row row)
+void XmlStreamReader::readRowElement(Row &row)
 {
     reader.readNext();
     while (!reader.atEnd()) {
@@ -77,9 +72,6 @@ void XmlStreamReader::readRowElement(Row row)
 
         if (reader.isStartElement()) {
             if (reader.name() == "field") {
-                QMessageBox box;
-                box.setText("Field");
-                box.exec();
                 Field field;
                 readFieldElement(field);
                 row.fields.append(field);
@@ -93,7 +85,7 @@ void XmlStreamReader::readRowElement(Row row)
     }
 }
 
-void XmlStreamReader::readFieldElement(Field field)
+void XmlStreamReader::readFieldElement(Field &field)
 {
     reader.readNext();
     while (!reader.atEnd()) {
@@ -105,23 +97,14 @@ void XmlStreamReader::readFieldElement(Field field)
     if (reader.isStartElement()) {
         if (reader.name() == "type") {
             field.type = readTypeElement();
-            QMessageBox box;
-            box.setText(field.type);
-            box.exec();
         }
         else if (reader.name()=="name")
         {
             field.name=readNameElement();
-            QMessageBox box;
-            box.setText(field.name);
-            box.exec();
         }
         else if (reader.name()=="value")
         {
             field.value=readValueElement();
-            QMessageBox box;
-            box.setText(field.value);
-            box.exec();
         }else {
             skipUnknownElement();
         }

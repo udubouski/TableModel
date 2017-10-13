@@ -170,21 +170,7 @@ void MainWindow::createConnections()
 
     connect(aboutAction, &QAction::triggered, this, &MainWindow::about);
 
- //   connect(model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),this, SLOT(setDirty()));
     connect(model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),this, SLOT(documentWasModified()));
-    //connect(model, SIGNAL(rowsRemoved(const QModelIndex&,int,int)),
-      //      this, SLOT(setDirty()));
-   /* connect(view->horizontalHeader(),
-            SIGNAL(sectionClicked(int)),
-            view, SLOT(sortByColumn(int)));
-
-    connect(model,
-        SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
-        this, SLOT(setDirty()));
-
-    connect(model, SIGNAL(rowsRemoved(const QModelIndex&,int,int)),
-            this, SLOT(setDirty()));
-    connect(model, SIGNAL(modelReset()), this, SLOT(setDirty()));*/
 
 }
 
@@ -206,7 +192,7 @@ void MainWindow::recieveVariant(QString str)
 
 void MainWindow::createWidget()
 {
-    view = new QTableView;
+   view = new QTableView;
     view->setModel(proxyModel);
     view->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     setCentralWidget(view);
@@ -372,26 +358,14 @@ bool MainWindow::okToContinue()
 
 bool MainWindow::loadFile(const QString &fileName)
 {
-   /* if (!model->readFile(fileName)) {
+    if (!model->readFile(fileName)) {
         statusBar()->showMessage(tr("Loading canceled"), 2000);
         return false;
     }
-    */
-    Table table;
-    XmlStreamReader reader(&table);
-    reader.readFile(fileName);
     setCurrentFile(fileName);
     statusBar()->showMessage(tr("File loaded"), 2000);
-
-    QMessageBox box;
-    Table tablet = reader.getTable();
-    box.setText( tablet.rows[0].fields[0].name);
-    box.exec();
     return true;
-
 }
-
-
 
 bool MainWindow::saveFile(const QString &fileName)
 {
