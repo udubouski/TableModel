@@ -2,6 +2,8 @@
 #define TABLEMODEL_H
 
 #include "personitems.h"
+#include "parser.h"
+#include "record.h"
 #include <QAbstractTableModel>
 #include <QtXml>
 
@@ -34,6 +36,8 @@ public:
     bool writeFile(const QString &filename);
     void clear();
 
+    int countField();
+
     QDomElement makeElement(QDomDocument& domDoc, const QString& strName, const QString& strAttr,const QString& strText );
 
     QDomElement record(QDomDocument& domDoc,
@@ -45,6 +49,7 @@ public:
                         const QString&      strNumberBrothers,
                         const QString&      strNumberSisters);
 private:
+    XmlStreamReader reader;
     QString m_filename;
     QList<PersonItem> persons;
 };

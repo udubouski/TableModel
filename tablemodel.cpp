@@ -17,7 +17,7 @@ const int MaxColumns = 7;
 }
 
 
-QDataStream &operator<<(QDataStream &out, const PersonItem &item)
+/*QDataStream &operator<<(QDataStream &out, const PersonItem &item)
 {
     out<< item.student<<item.father<<static_cast<quint16>(item.moneyFather)
        <<item.mother<<static_cast<quint16>(item.moneyMother)
@@ -35,7 +35,7 @@ QDataStream &operator>>(QDataStream &in, PersonItem &item)
     item.numberBrothers = static_cast<int>(numberBrothers);
     item.numberSisters = static_cast<int>(numberSisters);
     return in;
-}
+}*/
 
 
 Qt::ItemFlags TableModel::flags(const QModelIndex &index) const
@@ -122,22 +122,33 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 }
 
 
+int TableModel::countField()
+{
+    Table tablet = reader.getTable();
+    int num =tablet.rows[0].fields.count();
+    return num;
+}
+
 QVariant TableModel::headerData(int section,
         Qt::Orientation orientation, int role) const
 {
+
+    //int num = reader.getTable().rows[0].fields.size();
     if (role != Qt::DisplayRole)
         return QVariant();
     if (orientation == Qt::Horizontal) {
-        switch (section) {
-            case Student: return tr("Student");
-            case Father: return tr("Father");
-            case MoneyFather: return tr("Money father");
-            case Mother: return tr("Mother");
-            case MoneyMother: return tr("Money mother");
-            case NumberBrothers: return tr("Brothers");
-            case NumberSisters: return tr("Sisters");
-            default: Q_ASSERT(false);
-        }
+
+           /* switch (section) {
+                case Student: return tr("Student");
+                case Father: return tr("Father");
+                case MoneyFather: return tr("Money father");
+                case Mother: return tr("Mother");
+                case MoneyMother: return tr("Money mother");
+                case NumberBrothers: return tr("Brothers");
+                case NumberSisters: return tr("Sisters");
+                default: Q_ASSERT(false);
+            }*/
+
     }
     return section + 1;
 }
@@ -145,12 +156,14 @@ QVariant TableModel::headerData(int section,
 
 int TableModel::rowCount(const QModelIndex &index) const
 {
+
     return index.isValid() ? 0 : persons.count();
 }
 
 
 int TableModel::columnCount(const QModelIndex &index) const
 {
+
     return index.isValid() ? 0 : MaxColumns;
 }
 
@@ -158,9 +171,13 @@ int TableModel::columnCount(const QModelIndex &index) const
 bool TableModel::setData(const QModelIndex &index,
                          const QVariant &value, int role)
 {
+    //!!
+ //   int num = reader.getTable().rows[0].fields.size();
+    //!!
     if (!index.isValid() || role != Qt::EditRole ||
         index.row() < 0 || index.row() >= persons.count() ||
         index.column() < 0 || index.column() >= MaxColumns)
+            //index.column() < 0 || index.column() >= num)
         return false;
     PersonItem &item = persons[index.row()];
     switch (index.column()) {
@@ -228,11 +245,9 @@ bool TableModel::removeRows(int row, int count, const QModelIndex&)
 
 bool TableModel::readFile(const QString &filename)
 {
-    XmlStreamReader reader;
     reader.readFile(filename);
-
     Table tablet = reader.getTable();
-    QString st=tablet.rows[0].fields[1].name;
+    QString st=QString::number(tablet.rows[0].fields.size());
     QMessageBox box;
     box.setText(st);
     box.exec();
@@ -245,7 +260,7 @@ void TableModel::clear()
 {
     removeRows(0,rowCount());
 }
-
+/*
 bool TableModel::writeFile(const QString &filename)
 {
     QDomDocument doc("table10");
@@ -307,6 +322,7 @@ const QString& strMother,const QString& strMoneyMother,const QString& strNumberB
 
     return domElement;
 }
+*/
 
 
 

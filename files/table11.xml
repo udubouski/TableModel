@@ -1,0 +1,29 @@
+<table>
+	<row>
+		<field>
+			<type>string</type>
+			<name>student</name>
+			<value>Oleg</value>
+		</field>
+		<field>
+			<type>string</type>
+			<name>parent</name>
+			<value>Gleb</value>
+		</field>
+		<field>
+			<type>string</type>
+			<name>adress</name>
+			<value>100</value>
+		</field>
+		<field>
+			<type>string</type>
+			<name>position</name>
+			<value>engineer</value>
+		</field>
+		<field>
+			<type>int</type>
+			<name>experience</name>
+			<value>2</value>
+		</field>
+	</row>
+</table>

@@ -1,0 +1,34 @@
+<table>
+	<row>
+		<field>
+			<type>string</type>
+			<name>faculty</name>
+			<value>FITiU</value>
+		</field>
+		<field>
+			<type>string</type>
+			<name>department</name>
+			<value>Gleb</value>
+		</field>
+		<field>
+			<type>string</type>
+			<name>teacher</name>
+			<value>Olga</value>
+		</field>
+		<field>
+			<type>string</type>
+			<name>academictitle</name>
+			<value>scientist</value>
+		</field>
+		<field>
+			<type>string</type>
+			<name>academicdegree</name>
+			<value>High scientist</value>
+		</field>
+		<field>
+			<type>int</type>
+			<name>experience</name>
+			<value>2</value>
+		</field>		
+	</row>
+</table>

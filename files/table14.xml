@@ -1,0 +1,34 @@
+<table>
+	<row>
+		<field>
+			<type>string</type>
+			<name>student</name>
+			<value>Oleg</value>
+		</field>
+		<field>
+			<type>int</type>
+			<name>course</name>
+			<value>2</value>
+		</field>
+		<field>
+			<type>int</type>
+			<name>group</name>
+			<value>601101</value>
+		</field>
+		<field>
+			<type>int</type>
+			<name>numberworks</name>
+			<value>10</value>
+		</field>
+		<field>
+			<type>int</type>
+			<name>numbermadeworks</name>
+			<value>5</value>
+		</field>
+		<field>
+			<type>string</type>
+			<name>languageprogramming</name>
+			<value>C++</value>
+		</field>			
+	</row>
+</table>

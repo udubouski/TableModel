@@ -134,23 +134,6 @@ void MainWindow::createToolBars()
     recordToolBar->addAction(delAction);
 }
 
-/*void MainWindow::createToolPages()
-{
-    QHBoxLayout *hbox = new QHBoxLayout;
-
-    QPushButton *butFirst = new QPushButton(QIcon(":/pic/first.png"),tr("First page"),this);
-    QPushButton *butLast = new QPushButton(QIcon(":/pic/last.png"),tr("Last page"),this);
-    QPushButton *butPrev = new QPushButton(QIcon(":/pic/previous.png"),tr("Previous page"),this);
-    QPushButton *butNext = new QPushButton(QIcon(":/pic/next.png"),tr("Next page"),this);
-
-    hbox->addWidget(butFirst);
-    hbox->addWidget(butLast);
-    hbox->addWidget(butPrev);
-    hbox->addWidget(butNext);
-
-    setLayout(hbox);
-}*/
-
 void MainWindow::createStatusBar()
 {
     statusBar()->showMessage(tr("Ready"));
@@ -192,7 +175,7 @@ void MainWindow::recieveVariant(QString str)
 
 void MainWindow::createWidget()
 {
-   view = new QTableView;
+    view = new QTableView;
     view->setModel(proxyModel);
     view->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     setCentralWidget(view);
@@ -369,10 +352,10 @@ bool MainWindow::loadFile(const QString &fileName)
 
 bool MainWindow::saveFile(const QString &fileName)
 {
-   if (!model->writeFile(fileName)) {
+  /* if (!model->writeFile(fileName)) {
         statusBar()->showMessage(tr("Saving canceled"), 2000);
         return false;
-    }
+    }*/
     setCurrentFile(fileName);
     statusBar()->showMessage(tr("File saved"), 2000);
     return true;
