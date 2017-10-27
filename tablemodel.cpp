@@ -133,12 +133,11 @@ QVariant TableModel::headerData(int section,
         Qt::Orientation orientation, int role) const
 {
 
-    //int num = reader.getTable().rows[0].fields.size();
     if (role != Qt::DisplayRole)
         return QVariant();
     if (orientation == Qt::Horizontal) {
 
-           /* switch (section) {
+            switch (section) {
                 case Student: return tr("Student");
                 case Father: return tr("Father");
                 case MoneyFather: return tr("Money father");
@@ -147,7 +146,7 @@ QVariant TableModel::headerData(int section,
                 case NumberBrothers: return tr("Brothers");
                 case NumberSisters: return tr("Sisters");
                 default: Q_ASSERT(false);
-            }*/
+            }
 
     }
     return section + 1;
@@ -171,13 +170,10 @@ int TableModel::columnCount(const QModelIndex &index) const
 bool TableModel::setData(const QModelIndex &index,
                          const QVariant &value, int role)
 {
-    //!!
- //   int num = reader.getTable().rows[0].fields.size();
-    //!!
+
     if (!index.isValid() || role != Qt::EditRole ||
         index.row() < 0 || index.row() >= persons.count() ||
         index.column() < 0 || index.column() >= MaxColumns)
-            //index.column() < 0 || index.column() >= num)
         return false;
     PersonItem &item = persons[index.row()];
     switch (index.column()) {
@@ -246,8 +242,8 @@ bool TableModel::removeRows(int row, int count, const QModelIndex&)
 bool TableModel::readFile(const QString &filename)
 {
     reader.readFile(filename);
-    Table tablet = reader.getTable();
-    QString st=QString::number(tablet.rows[0].fields.size());
+    Table tablet=reader.getTable();
+    QString st=tablet.rows[0].fields[0].value;
     QMessageBox box;
     box.setText(st);
     box.exec();

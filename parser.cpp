@@ -15,13 +15,13 @@ bool XmlStreamReader::readFile(const QString &fileName)
     }
 
     reader.setDevice(&file);
-
+    Table table;
     reader.readNext();
     while (!reader.atEnd()){
         if(reader.isStartElement())
         {
             if (reader.name()=="table")
-            {                
+            {
                 readTableElement(table);
 
             } else{
@@ -32,6 +32,7 @@ bool XmlStreamReader::readFile(const QString &fileName)
         }
     }
     file.close();
+    tablet=table;
     return true;
 }
 

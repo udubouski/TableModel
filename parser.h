@@ -11,7 +11,7 @@ public:
     XmlStreamReader();
 
     bool readFile(const QString &fileName);
-    Table getTable() {return table;}
+    Table getTable() {return tablet;}
 
 private:
     void readTableElement(Table &table);
@@ -23,7 +23,7 @@ private:
     void skipUnknownElement();
 
     QXmlStreamReader reader;
-    Table table;
+    Table tablet;
 };
 
 
