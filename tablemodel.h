@@ -34,6 +34,7 @@ public:
     QString filename() const { return m_filename; }
     bool readFile(const QString &filename);
     bool writeFile(const QString &filename);
+
     void clear();
 
     int countField();

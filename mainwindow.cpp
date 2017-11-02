@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     createToolBars();
     createStatusBar();
     createConnections();
-    createWidget();
+   // createWidget();
 
     readSettings();
 
@@ -345,6 +345,8 @@ bool MainWindow::loadFile(const QString &fileName)
         statusBar()->showMessage(tr("Loading canceled"), 2000);
         return false;
     }
+    createWidget();
+    model->clear();
     setCurrentFile(fileName);
     statusBar()->showMessage(tr("File loaded"), 2000);
     return true;

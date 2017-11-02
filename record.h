@@ -12,7 +12,6 @@ struct Field
     QString value;
 };
 
-
 class Row
 {
 public:

@@ -13,9 +13,8 @@
 namespace {
 const qint32 MagicNumber = 0x5A697043;
 const qint16 FormatNumber = 100;
-const int MaxColumns = 7;
+const int MaxColumns =7;
 }
-
 
 /*QDataStream &operator<<(QDataStream &out, const PersonItem &item)
 {
@@ -46,10 +45,12 @@ Qt::ItemFlags TableModel::flags(const QModelIndex &index) const
 
 QVariant TableModel::data(const QModelIndex &index, int role) const
 {
+
     if (!index.isValid() ||
         index.row() < 0 || index.row() >= persons.count() ||
         index.column() < 0 || index.column() >= MaxColumns)
         return QVariant();
+
     const PersonItem &item = persons.at(index.row());
     if (role == Qt::SizeHintRole) {
         QStyleOptionComboBox option;
@@ -129,40 +130,34 @@ int TableModel::countField()
     return num;
 }
 
-QVariant TableModel::headerData(int section,
-        Qt::Orientation orientation, int role) const
+QVariant TableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-
     if (role != Qt::DisplayRole)
         return QVariant();
-    if (orientation == Qt::Horizontal) {
 
+    if (orientation == Qt::Horizontal) {
             switch (section) {
-                case Student: return tr("Student");
-                case Father: return tr("Father");
-                case MoneyFather: return tr("Money father");
-                case Mother: return tr("Mother");
-                case MoneyMother: return tr("Money mother");
-                case NumberBrothers: return tr("Brothers");
-                case NumberSisters: return tr("Sisters");
+                case 0: return tr("Student");
+                case 1: return tr("Father");
+                case 2: return tr("Money father");
+                case 3: return tr("Mother");
+                case 4: return tr("Money mother");
+                case 5: return tr("Brothers");
+                case 6: return tr("Sisters");
                 default: Q_ASSERT(false);
             }
-
     }
     return section + 1;
 }
 
-
 int TableModel::rowCount(const QModelIndex &index) const
 {
-
     return index.isValid() ? 0 : persons.count();
 }
 
 
 int TableModel::columnCount(const QModelIndex &index) const
 {
-
     return index.isValid() ? 0 : MaxColumns;
 }
 
@@ -242,14 +237,11 @@ bool TableModel::removeRows(int row, int count, const QModelIndex&)
 bool TableModel::readFile(const QString &filename)
 {
     reader.readFile(filename);
-    Table tablet=reader.getTable();
-    QString st=tablet.rows[0].fields[0].value;
+    QString st=filename;
     QMessageBox box;
     box.setText(st);
     box.exec();
-
     return true;
-
 }
 
 void TableModel::clear()
