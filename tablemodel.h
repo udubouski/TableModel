@@ -37,8 +37,6 @@ public:
 
     void clear();
 
-    int countField();
-
     QDomElement makeElement(QDomDocument& domDoc, const QString& strName, const QString& strAttr,const QString& strText );
 
     QDomElement record(QDomDocument& domDoc,

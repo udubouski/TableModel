@@ -11,7 +11,8 @@ public:
     XmlStreamReader();
 
     bool readFile(const QString &fileName);
-    Table getTable() {return tablet;}
+    Table getTable() const {return tablet;}
+    int CountColumn() const {return tablet.rows[0].fields.count();}
 
 private:
     void readTableElement(Table &table);

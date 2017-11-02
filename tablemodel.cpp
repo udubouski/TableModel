@@ -122,30 +122,14 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-
-int TableModel::countField()
-{
-    Table tablet = reader.getTable();
-    int num =tablet.rows[0].fields.count();
-    return num;
-}
-
 QVariant TableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+
     if (role != Qt::DisplayRole)
         return QVariant();
 
     if (orientation == Qt::Horizontal) {
-            switch (section) {
-                case 0: return tr("Student");
-                case 1: return tr("Father");
-                case 2: return tr("Money father");
-                case 3: return tr("Mother");
-                case 4: return tr("Money mother");
-                case 5: return tr("Brothers");
-                case 6: return tr("Sisters");
-                default: Q_ASSERT(false);
-            }
+        return reader.getTable().rows[0].fields[section].name;
     }
     return section + 1;
 }
@@ -158,7 +142,7 @@ int TableModel::rowCount(const QModelIndex &index) const
 
 int TableModel::columnCount(const QModelIndex &index) const
 {
-    return index.isValid() ? 0 : MaxColumns;
+    return index.isValid() ? 0 : reader.CountColumn();
 }
 
 
@@ -237,18 +221,11 @@ bool TableModel::removeRows(int row, int count, const QModelIndex&)
 bool TableModel::readFile(const QString &filename)
 {
     reader.readFile(filename);
-    QString st=filename;
-    QMessageBox box;
-    box.setText(st);
-    box.exec();
     return true;
 }
 
-void TableModel::clear()
-{
-    removeRows(0,rowCount());
-}
-/*
+
+
 bool TableModel::writeFile(const QString &filename)
 {
     QDomDocument doc("table10");
@@ -310,7 +287,7 @@ const QString& strMother,const QString& strMoneyMother,const QString& strNumberB
 
     return domElement;
 }
-*/
+
 
 
 

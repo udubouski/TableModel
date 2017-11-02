@@ -194,7 +194,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::newFile()
 {
     if (okToContinue()) {
-        model->clear();
         selDialog = new SelectDialog(this);
         connect(selDialog, SIGNAL(sendData(QString)), this, SLOT(recieveVariant(QString)));
         selDialog-> show();
@@ -346,7 +345,6 @@ bool MainWindow::loadFile(const QString &fileName)
         return false;
     }
     createWidget();
-    model->clear();
     setCurrentFile(fileName);
     statusBar()->showMessage(tr("File loaded"), 2000);
     return true;
@@ -354,10 +352,10 @@ bool MainWindow::loadFile(const QString &fileName)
 
 bool MainWindow::saveFile(const QString &fileName)
 {
-  /* if (!model->writeFile(fileName)) {
+   if (!model->writeFile(fileName)) {
         statusBar()->showMessage(tr("Saving canceled"), 2000);
         return false;
-    }*/
+    }
     setCurrentFile(fileName);
     statusBar()->showMessage(tr("File saved"), 2000);
     return true;
