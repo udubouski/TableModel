@@ -75,7 +75,7 @@ void AddDialog::createLayout()
 
 void AddDialog::addRecord()
 {
-    emit sendData(lineStudent->text(),lineFather->text(),lineMoneyFather->text().toInt(),lineMother->text(),
-                  lineMoneyMother->text().toInt(),lineNumberBrother->text().toInt(),lineNumberSister->text().toInt());
+    emit sendData(lineStudent->text(),lineFather->text(),lineMoneyFather->text(),lineMother->text(),
+                  lineMoneyMother->text(),lineNumberBrother->text(),lineNumberSister->text());
     this->close();
 }

@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     //MODELS [1]
     model = new TableModel(this);
     proxyModel = new ProxyModel(this);
-    proxyModel->setSourceModel(model);
+    //proxyModel->setSourceModel(model);
     // ![1]
 
     createActions();
@@ -175,6 +175,7 @@ void MainWindow::recieveVariant(QString str)
 
 void MainWindow::createWidget()
 {
+    proxyModel->setSourceModel(model);
     view = new QTableView;
     view->setModel(proxyModel);
     view->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -217,7 +218,7 @@ void MainWindow::open()
 
 bool MainWindow::save()
 {
-    if (curFile.isEmpty()) {
+   if (curFile.isEmpty()) {
         return saveAs();
     } else {
         return saveFile(curFile);
@@ -268,7 +269,7 @@ void MainWindow::about()
     QMessageBox::about(this, tr("About Dialog"),tr("The second lab PPVIS"));
 }
 
-void MainWindow::recieveData(QString student, QString father, int moneyfather, QString mother, int moneymother, int numberbrothers, int numbersisters)
+void MainWindow::recieveData(QString student, QString father, QString moneyfather, QString mother, QString moneymother, QString numberbrothers, QString numbersisters)
 {
     model->insertRows(model->rowCount(), 1, QModelIndex());
 

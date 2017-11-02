@@ -1,7 +1,6 @@
 #ifndef TABLEMODEL_H
 #define TABLEMODEL_H
 
-#include "personitems.h"
 #include "parser.h"
 #include "record.h"
 #include <QAbstractTableModel>
@@ -50,7 +49,8 @@ public:
 private:
     XmlStreamReader reader;
     QString m_filename;
-    QList<PersonItem> persons;
+    QList<Row> rows;
+
 };
 #endif // TABLEMODEL_H
 

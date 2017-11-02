@@ -10,12 +10,12 @@ class ProxyModel : public QSortFilterProxyModel
 public:
     explicit ProxyModel(QObject *parent=0);
 
-    int numberBrothers() const {return m_numberBrothers;}
-    int numberSisters() const {return m_numberSisters;}
-    int minMoneyFather() const {return m_minMoneyFather;}
-    int maxMoneyFather() const {return m_maxMoneyFather;}
-    int minMoneyMother() const {return m_minMoneyMother;}
-    int maxMoneyMother() const {return m_maxMoneyMother;}
+    QString numberBrothers() const {return m_numberBrothers;}
+    QString numberSisters() const {return m_numberSisters;}
+    QString minMoneyFather() const {return m_minMoneyFather;}
+    QString maxMoneyFather() const {return m_maxMoneyFather;}
+    QString minMoneyMother() const {return m_minMoneyMother;}
+    QString maxMoneyMother() const {return m_maxMoneyMother;}
     QString student() const { return m_student; }
     QString father() const { return m_father; }
     QString mother() const { return m_mother; }
@@ -23,12 +23,12 @@ public:
 public slots:
     void clearFilters();
 
-    void setNumberBrothers(int numberBrothers);
-    void setNumberSisters(int numberSisters);
-    void setMinMoneyFather(int minMoneyFather);
-    void setMaxMoneyFather(int maxMoneyFather);
-    void setMinMoneyMother(int minMoneyMother);
-    void setMaxMoneyMother(int maxMoneyMother);
+    void setNumberBrothers(const QString &numberBrothers);
+    void setNumberSisters(const QString &numberSisters);
+    void setMinMoneyFather(const QString &minMoneyFather);
+    void setMaxMoneyFather(const QString &maxMoneyFather);
+    void setMinMoneyMother(const QString &minMoneyMother);
+    void setMaxMoneyMother(const QString &maxMoneyMother);
     void setStudent(const QString &student);
     void setFather(const QString &father);
     void setMother(const QString &mother);
@@ -38,12 +38,12 @@ protected:
                           const QModelIndex &sourceParent) const;
 
 private:
-    int m_numberBrothers;
-    int m_numberSisters;
-    int m_minMoneyFather;
-    int m_maxMoneyFather;
-    int m_minMoneyMother;
-    int m_maxMoneyMother;
+    QString m_numberBrothers;
+    QString m_numberSisters;
+    QString m_minMoneyFather;
+    QString m_maxMoneyFather;
+    QString m_minMoneyMother;
+    QString m_maxMoneyMother;
     QString m_student;
     QString m_father;
     QString m_mother;

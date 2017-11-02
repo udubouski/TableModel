@@ -15,8 +15,8 @@ public:
     AddDialog(QWidget *parent=0);
 
 signals:
-    void sendData(QString student, QString father, int moneyfather, QString mother, int moneymother,
-                  int numberbrothers, int numbersisters);
+    void sendData(QString student, QString father, QString moneyfather, QString mother, QString moneymother,
+                  QString numberbrothers, QString numbersisters);
 
 private slots:
     void addRecord();

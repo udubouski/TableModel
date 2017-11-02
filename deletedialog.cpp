@@ -32,14 +32,14 @@ void DeleteDialog::createWidget()
     lineStudent = new QComboBox;
     lineFather = new QComboBox;
     lineMoneyFatherDown = new QSpinBox;
-    lineMoneyFatherDown->setRange(MinCode,MaxCode);
+    //lineMoneyFatherDown->setRange(MinCode,MaxCode);
     lineMoneyFatherUp = new QSpinBox;
-    lineMoneyFatherUp->setRange(MinCode,MaxCode);
+  //  lineMoneyFatherUp->setRange(MinCode,MaxCode);
     lineMother = new QComboBox;
     lineMoneyMotherDown = new QSpinBox;
     lineMoneyMotherUp = new QSpinBox;
-    lineMoneyMotherDown->setRange(MinCode,MaxCode);
-    lineMoneyMotherUp->setRange(MinCode,MaxCode);
+   // lineMoneyMotherDown->setRange(MinCode,MaxCode);
+  //  lineMoneyMotherUp->setRange(MinCode,MaxCode);
     lineNumberBrother = new QComboBox;
     lineNumberSister = new QComboBox;
 
@@ -164,10 +164,10 @@ void DeleteDialog::updateUi()
             restoreFilters();
     else if (box2->isChecked())
         restoreFilters2();
-    else if (box3->isChecked())
-        restoreFilters3();
-    else if (box4->isChecked())
-        restoreFilters4();
+    else if (box3->isChecked()){}
+        //restoreFilters3();
+    else if (box4->isChecked()){}
+        //restoreFilters4();
     else proxyModel->clearFilters();
 }
 
@@ -191,7 +191,7 @@ void DeleteDialog::restoreFilters2()
     }
 }
 
-void DeleteDialog::restoreFilters3()
+/*void DeleteDialog::restoreFilters3()
 {
     if (box3->isChecked())
     {
@@ -222,7 +222,7 @@ void DeleteDialog::restoreFilters4()
         proxyModel->setMaxMoneyMother(0);
     }
 }
-
+*/
 void DeleteDialog::delRecord()
 {
     QItemSelectionModel *selectionModel = resultTable->selectionModel();

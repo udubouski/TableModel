@@ -8,7 +8,6 @@ SOURCES += \
     tablemodel.cpp \
     proxymodel.cpp \
     uniqueproxymodel.cpp \
-    record.cpp \
     parser.cpp
 
 QT += core gui \
@@ -24,8 +23,6 @@ HEADERS += \
     tablemodel.h \
     proxymodel.h \
     uniqueproxymodel.h \
-    personitems.h \
-    global.h \
     record.h \
     parser.h
 

@@ -12,7 +12,8 @@ public:
 
     bool readFile(const QString &fileName);
     Table getTable() const {return tablet;}
-    int CountColumn() const {return tablet.rows[0].fields.count();}
+    int RowCount() const {return tablet.rows.count();}
+    int ColumnCount() const {return tablet.rows[0].fields.count();}
 
 private:
     void readTableElement(Table &table);
